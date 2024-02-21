@@ -17,8 +17,7 @@ const LoginForm = ({ switchToRegistration }) => {
         });
     };
 
-    const [usernameValidateError, setUsernameValidateError] = useState('');
-    const [passwordValidateError, setPasswordValidateError] = useState('');
+    const [unauthorised, setUnauthorised] = useState(false);
 
     const handleSubmit = (e) => {
         e.preventDefault();
@@ -30,20 +29,14 @@ const LoginForm = ({ switchToRegistration }) => {
                 'Content-Type': 'application/json'
             }
         })
-            .then(response => response.json())
+            .then(response => {
+                if (response.status === 401) {
+                    setUnauthorised(true);
+                }
+            })
             .then(data => {
                 console.log(data);
-                // Обробка відповіді з сервера
-                if (data.username) {
-                    setUsernameValidateError(data.username[0]);
-                } else {
-                    setUsernameValidateError('');
-                }
-                if (data.password) {
-                    setPasswordValidateError(data.password[0]);
-                } else {
-                    setPasswordValidateError('');
-                }
+                
             })
             .catch((error) => {
                 console.error('Error:', error);
@@ -65,7 +58,7 @@ const LoginForm = ({ switchToRegistration }) => {
                         value={formData.username}
                         onChange={handleChange}
                     />
-                    {usernameValidateError && (<span style={{ color: 'red' }}>{usernameValidateError}</span>)}
+                    {unauthorised && (<span style={{ color: 'red' }}>Неправильно введене ім'я користувача або пароль</span>)}
                 </div>
                 <div>
                     <label htmlFor="password">Пароль:</label>
@@ -78,7 +71,7 @@ const LoginForm = ({ switchToRegistration }) => {
                         value={formData.password}
                         onChange={handleChange}
                     />
-                    {passwordValidateError && (<span style={{ color: 'red' }}>{passwordValidateError}</span>)}
+                    {unauthorised && (<span style={{ color: 'red' }}>Неправильно введене ім'я користувача або пароль</span>)}
                 </div>
                 <button type="submit" className="btn_btn-primary">
                     Увійти
