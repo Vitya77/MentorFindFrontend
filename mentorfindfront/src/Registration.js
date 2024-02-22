@@ -16,6 +16,8 @@ const validationSchema = Yup.object().shape({
         .test('is_uppercase', 'Пароль повинен містити велику літеру', function (value) {
             return value.toLowerCase() !== value
         }),
+    confirmPassword: Yup.string()
+        .required('Підтвердження паролю є обов\'язковим')
 });
 
 function RegistrationForm() {
@@ -26,13 +28,12 @@ function RegistrationForm() {
     });
 
     const [confirmPassword, setConfirmPassword] = useState('');
-    const [passwordsMatch, setPasswordsMatch] = useState(true);
 
     const confirmPassChange = (event) => {
-        const value = event.target.value;
+        const { name, value } = event.target;
 
         setConfirmPassword(value);
-        setPasswordsMatch(formData.password === value || value === null);
+        validateField(name, value);
     };
 
 
@@ -47,10 +48,6 @@ function RegistrationForm() {
         });
 
         validateField(name, value);
-
-        if (name === 'password') {
-            setPasswordsMatch(value === confirmPassword || confirmPassword === '');
-        }
     };
 
     const validateField = async (name, value) => {
@@ -69,10 +66,8 @@ function RegistrationForm() {
             await validationSchema.validate(formData, { abortEarly: false });
             
             if (formData.password !== confirmPassword) {
-                setPasswordsMatch(false);
                 return;
             }
-            setPasswordsMatch(true);
 
             fetch('http://localhost:8000/users/register/', {
                 method: 'POST',
@@ -152,7 +147,8 @@ function RegistrationForm() {
                         value={confirmPassword}
                         onChange={confirmPassChange}
                     />
-                    {!passwordsMatch && <span style={{ color: 'red' }}>Паролі не співпадають</span>}
+                    {errors.confirmPassword && <span style={{ color: 'red' }}>{errors.confirmPassword}</span>}
+                    {!(confirmPassword === formData.password || confirmPassword === '') && <span style={{ color: 'red' }}>Паролі не співпадають</span>}
                 </div>
                 <button type="submit" className="btn btn-primary">
                     Зареєструватися
