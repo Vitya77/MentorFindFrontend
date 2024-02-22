@@ -17,23 +17,6 @@ const validationSchema = Yup.object().shape({
             return value.toLowerCase() !== value
         }),
 });
-import * as Yup from 'yup';
-
-
-const validationSchema = Yup.object().shape({
-    username: Yup.string()
-        .required('Ім\'я користувача є обов\'язковим')
-        .min(5, 'Ім\'я користувача повинно містити щонайменше 5 символи'),
-    email: Yup.string()
-        .email('Введіть коректну електронну адресу')
-        .required('Електронна адреса є обов\'язковою'),
-    password: Yup.string()
-        .required('Пароль є обов\'язковим')
-        .min(8, 'Пароль повинен містити щонайменше 8 символів')
-        .test('is_uppercase', 'Пароль повинен містити велику літеру', function (value) {
-            return value.toLowerCase() !== value
-        }),
-});
 
 function RegistrationForm() {
     const [formData, setFormData] = useState({
@@ -50,11 +33,7 @@ function RegistrationForm() {
 
         setConfirmPassword(value);
         setPasswordsMatch(formData.password === value || value === null);
-        setPasswordsMatch(formData.password === value || value === null);
     };
-
-
-    const [errors, setErrors] = useState({});
 
 
     const [errors, setErrors] = useState({});
@@ -69,24 +48,11 @@ function RegistrationForm() {
 
         validateField(name, value);
 
-        validateField(name, value);
-
         if (name === 'password') {
             setPasswordsMatch(value === confirmPassword || confirmPassword === '');
-            setPasswordsMatch(value === confirmPassword || confirmPassword === '');
         }
     };
 
-    const validateField = async (name, value) => {
-        try {
-            await Yup.reach(validationSchema, name).validate(value);
-            setErrors({ ...errors, [name]: '' });
-        } catch (error) {
-            setErrors({ ...errors, [name]: error.message });
-        }
-    };
-
-    const handleSubmit = async (e) => {
     const validateField = async (name, value) => {
         try {
             await Yup.reach(validationSchema, name).validate(value);
@@ -181,7 +147,6 @@ function RegistrationForm() {
                     <input
                         type="password"
                         id="confirm_password"
-                        name="confirmPassword"
                         name="confirmPassword"
                         className="form-control"
                         value={confirmPassword}
