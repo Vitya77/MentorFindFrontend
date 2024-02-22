@@ -29,8 +29,6 @@ const LoginForm = ({ switchToRegistration }) => {
         var isEmail = false;
         isEmail = await schema.isValid({ email: formData.usernameOrEmail })
 
-        console.log(isEmail);
-
         const dataToSend = isEmail ? JSON.stringify({
             email: formData.usernameOrEmail,
             password: formData.password
