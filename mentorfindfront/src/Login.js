@@ -1,11 +1,15 @@
 import React, { useState } from 'react';
 import './App.css';
+import * as Yup from 'yup';
 
+const schema = Yup.object().shape({
+  email: Yup.string().email()
+});
 
 const LoginForm = ({ switchToRegistration }) => {
     const [formData, setFormData] = useState({
         // Створіть стан для зберігання даних форми
-        username: '',
+        usernameOrEmail: '',
         password: ''
     });
 
@@ -19,12 +23,25 @@ const LoginForm = ({ switchToRegistration }) => {
 
     const [unauthorised, setUnauthorised] = useState(false);
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
+
+        var isEmail = false;
+        isEmail = await schema.isValid({ email: formData.usernameOrEmail })
+
+        console.log(isEmail);
+
+        const dataToSend = isEmail ? JSON.stringify({
+            email: formData.usernameOrEmail,
+            password: formData.password
+        }) : JSON.stringify({
+            username: formData.usernameOrEmail,
+            password: formData.password
+        });
 
         fetch('http://127.0.0.1:8000/users/login/', {
             method: 'POST',
-            body: JSON.stringify(formData),
+            body: dataToSend,
             headers: {
                 'Content-Type': 'application/json'
             }
@@ -33,6 +50,7 @@ const LoginForm = ({ switchToRegistration }) => {
                 if (response.status === 401) {
                     setUnauthorised(true);
                 }
+                return response.json();
             })
             .then(data => {
                 console.log(data);
@@ -48,17 +66,17 @@ const LoginForm = ({ switchToRegistration }) => {
             <h2 className="text-center">Вхід на курс</h2>
             <form onSubmit={handleSubmit} method="post">
                 <div>
-                    <label htmlFor="username">Ім'я користувача:</label>
+                    <label htmlFor="username">Ім'я користувача або емейл:</label>
                     <input
                         type="text"
                         id="username"
-                        name="username"
+                        name="usernameOrEmail"
                         className="form-control"
                         required=""
-                        value={formData.username}
+                        value={formData.usernameOrEmail}
                         onChange={handleChange}
                     />
-                    {unauthorised && (<span style={{ color: 'red' }}>Неправильно введене ім'я користувача або пароль</span>)}
+                    {unauthorised && (<span style={{ color: 'red' }}>Неправильно введене ім'я користувача, емейл або пароль</span>)}
                 </div>
                 <div>
                     <label htmlFor="password">Пароль:</label>
@@ -71,7 +89,7 @@ const LoginForm = ({ switchToRegistration }) => {
                         value={formData.password}
                         onChange={handleChange}
                     />
-                    {unauthorised && (<span style={{ color: 'red' }}>Неправильно введене ім'я користувача або пароль</span>)}
+                    {unauthorised && (<span style={{ color: 'red' }}>Неправильно введене ім'я, емейл користувача або пароль</span>)}
                 </div>
                 <button type="submit" className="btn_btn-primary">
                     Увійти
