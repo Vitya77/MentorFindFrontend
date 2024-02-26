@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import './App.css';
+import config from './config'
 
+const serverURL = config.serverURL;
 
 const LoginForm = ({ switchToRegistration }) => {
     const [formData, setFormData] = useState({
@@ -22,7 +24,7 @@ const LoginForm = ({ switchToRegistration }) => {
     const handleSubmit = (e) => {
         e.preventDefault();
 
-        fetch('http://127.0.0.1:8000/users/login/', {
+        fetch(`${serverURL}/users/login/`, {
             method: 'POST',
             body: JSON.stringify(formData),
             headers: {

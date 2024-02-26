@@ -1,24 +1,45 @@
 import React, { useState } from 'react';
 import './App.css';
+import * as Yup from 'yup';
+import config from './config'
 
+const serverURL = config.serverURL;
+
+const validationSchema = Yup.object().shape({
+    username: Yup.string()
+        .required('Ім\'я користувача є обов\'язковим')
+        .min(5, 'Ім\'я користувача повинно містити щонайменше 5 символи'),
+    email: Yup.string()
+        .email('Введіть коректну електронну адресу')
+        .required('Електронна адреса є обов\'язковою'),
+    password: Yup.string()
+        .required('Пароль є обов\'язковим')
+        .min(8, 'Пароль повинен містити щонайменше 8 символів')
+        .test('is_uppercase', 'Пароль повинен містити велику літеру', function (value) {
+            return value.toLowerCase() !== value
+        }),
+    confirmPassword: Yup.string()
+        .required('Підтвердження паролю є обов\'язковим')
+});
 
 function RegistrationForm() {
     const [formData, setFormData] = useState({
-        // Створіть стан для зберігання даних форми
         username: '',
         email: '',
         password: ''
     });
 
     const [confirmPassword, setConfirmPassword] = useState('');
-    const [passwordsMatch, setPasswordsMatch] = useState(true);
 
     const confirmPassChange = (event) => {
-        const value = event.target.value;
+        const { name, value } = event.target;
 
         setConfirmPassword(value);
-        setPasswordsMatch(formData.password === value);
+        validateField(name, value);
     };
+
+
+    const [errors, setErrors] = useState({});
 
     const handleChange = (event) => {
         const { name, value } = event.target;
@@ -28,54 +49,50 @@ function RegistrationForm() {
             [name]: value
         });
 
-        if (name === 'password') {
-            setPasswordsMatch(value === confirmPassword);
+        validateField(name, value);
+    };
+
+    const validateField = async (name, value) => {
+        try {
+            await Yup.reach(validationSchema, name).validate(value);
+            setErrors({ ...errors, [name]: '' });
+        } catch (error) {
+            setErrors({ ...errors, [name]: error.message });
         }
     };
 
-    const [usernameValidateError, setUsernameValidateError] = useState('');
-    const [passwordValidateError, setPasswordValidateError] = useState('');
-    const [emailValidateError, setEmailValidateError] = useState('');
-
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
 
-        if (formData.password !== confirmPassword) {
-            setPasswordsMatch(false);
-            return;
-        }
-        setPasswordsMatch(true);
-
-        fetch('http://localhost:8000/users/register/', {
-            method: 'POST',
-            body: JSON.stringify(formData),
-            headers: {
-                'Content-Type': 'application/json'
+        try {
+            await validationSchema.validate(formData, { abortEarly: false });
+            
+            if (formData.password !== confirmPassword) {
+                return;
             }
-        })
-            .then(response => response.json())
-            .then(data => {
-                // Обробка відповіді з сервера
-                console.log('Success:', data);
-                if (data.username) {
-                    setUsernameValidateError(data.username[0]);
-                } else {
-                    setUsernameValidateError('');
-                }
-                if (data.email) {
-                    setEmailValidateError(data.email[0]);
-                } else {
-                    setEmailValidateError('');
-                }
-                if (data.password) {
-                    setPasswordValidateError(data.password[0]);
-                } else {
-                    setPasswordValidateError('');
+
+            fetch(`${serverURL}/users/register/`, {
+                method: 'POST',
+                body: JSON.stringify(formData),
+                headers: {
+                    'Content-Type': 'application/json'
                 }
             })
-            .catch((error) => {
-                console.error('Error:', error);
+                .then(response => response.json())
+                .then(data => {
+                    // Обробка відповіді з сервера
+                    console.log('Success:', data);
+                })
+                .catch((error) => {
+                    console.error('Error:', error);
+                });
+        } catch (error) {
+            const fieldErrors = {};
+            error.inner.forEach(err => {
+                fieldErrors[err.path] = err.message;
             });
+            setErrors(fieldErrors);
+        }
     };
 
 
@@ -94,7 +111,7 @@ function RegistrationForm() {
                         value={formData.username}
                         onChange={handleChange}
                     />
-                    {usernameValidateError && (<span style={{ color: 'red' }}>{usernameValidateError}</span>)}
+                    {errors.username && <span style={{ color: 'red' }}>{errors.username}</span>}
                 </div>
                 <div>
                     <label htmlFor="email">Електронна пошта:</label>
@@ -107,7 +124,7 @@ function RegistrationForm() {
                         value={formData.email}
                         onChange={handleChange}
                     />
-                    {emailValidateError && (<span style={{ color: 'red' }}>{emailValidateError}</span>)}
+                    {errors.email && <span style={{ color: 'red' }}>{errors.email}</span>}
                 </div>
                 <div>
                     <label htmlFor="password">Пароль:</label>
@@ -120,20 +137,20 @@ function RegistrationForm() {
                         value={formData.password}
                         onChange={handleChange}
                     />
-                    {passwordValidateError && (<span style={{ color: 'red' }}>{passwordValidateError}</span>)}
+                    {errors.password && <span style={{ color: 'red' }}>{errors.password}</span>}
                 </div>
                 <div>
                     <label htmlFor="confirm_password">Підтвердження паролю:</label>
                     <input
                         type="password"
                         id="confirm_password"
-                        name="confirm_password"
+                        name="confirmPassword"
                         className="form-control"
-                        required=""
                         value={confirmPassword}
                         onChange={confirmPassChange}
                     />
-                    {!passwordsMatch && <span style={{ color: 'red' }}>Паролі не співпадають</span>}
+                    {errors.confirmPassword && <span style={{ color: 'red' }}>{errors.confirmPassword}</span>}
+                    {!(confirmPassword === formData.password || confirmPassword === '') && <span style={{ color: 'red' }}>Паролі не співпадають</span>}
                 </div>
                 <button type="submit" className="btn btn-primary">
                     Зареєструватися
