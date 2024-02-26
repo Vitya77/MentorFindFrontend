@@ -1,10 +1,13 @@
 import React, { useState } from 'react';
 import './App.css';
 import * as Yup from 'yup';
+import config from './config'
 
 const schema = Yup.object().shape({
   email: Yup.string().email()
 });
+
+const serverURL = config.serverURL;
 
 const LoginForm = ({ switchToRegistration }) => {
     const [formData, setFormData] = useState({
@@ -37,7 +40,7 @@ const LoginForm = ({ switchToRegistration }) => {
             password: formData.password
         });
 
-        fetch('http://127.0.0.1:8000/users/login/', {
+        fetch(`${serverURL}/users/login/`, {
             method: 'POST',
             body: dataToSend,
             headers: {
