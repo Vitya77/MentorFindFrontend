@@ -1,7 +1,9 @@
 import React, { useState } from 'react';
 import './App.css';
 import * as Yup from 'yup';
+import config from './config'
 
+const serverURL = config.serverURL;
 
 const validationSchema = Yup.object().shape({
     username: Yup.string()
@@ -69,7 +71,7 @@ function RegistrationForm() {
                 return;
             }
 
-            fetch('http://localhost:8000/users/register/', {
+            fetch(`${serverURL}/users/register/`, {
                 method: 'POST',
                 body: JSON.stringify(formData),
                 headers: {
