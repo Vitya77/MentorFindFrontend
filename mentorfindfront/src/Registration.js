@@ -26,18 +26,9 @@ function RegistrationForm() {
     const [formData, setFormData] = useState({
         username: '',
         email: '',
-        password: ''
+        password: '',
+        confirmPassword: ''
     });
-
-    const [confirmPassword, setConfirmPassword] = useState('');
-
-    const confirmPassChange = (event) => {
-        const { name, value } = event.target;
-
-        setConfirmPassword(value);
-        validateField(name, value);
-    };
-
 
     const [errors, setErrors] = useState({});
 
@@ -67,13 +58,21 @@ function RegistrationForm() {
         try {
             await validationSchema.validate(formData, { abortEarly: false });
             
-            if (formData.password !== confirmPassword) {
+            if (formData.password !== formData.confirmPassword) {
                 return;
             }
 
+            const dataToSend = JSON.stringify(
+                {
+                    "username": formData.username,
+                    "email": formData.email,
+                    "password": formData.password
+                }
+            );
+
             fetch(`${serverURL}/users/register/`, {
                 method: 'POST',
-                body: JSON.stringify(formData),
+                body: dataToSend,
                 headers: {
                     'Content-Type': 'application/json'
                 }
@@ -146,11 +145,11 @@ function RegistrationForm() {
                         id="confirm_password"
                         name="confirmPassword"
                         className="form-control"
-                        value={confirmPassword}
-                        onChange={confirmPassChange}
+                        value={formData.confirmPassword}
+                        onChange={handleChange}
                     />
                     {errors.confirmPassword && <span style={{ color: 'red' }}>{errors.confirmPassword}</span>}
-                    {!(confirmPassword === formData.password || confirmPassword === '') && <span style={{ color: 'red' }}>Паролі не співпадають</span>}
+                    {!(formData.confirmPassword === formData.password || formData.confirmPassword === '') && <span style={{ color: 'red' }}>Паролі не співпадають</span>}
                 </div>
                 <button type="submit" className="btn btn-primary">
                     Зареєструватися
