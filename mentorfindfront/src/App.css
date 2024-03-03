@@ -1,29 +1,14 @@
-body {
-  background-color: #f4f4f4;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 100vh;
-  margin: 0;
-}
+/* Стилі для форм реєстрації та логування */
 
-.container {
-  background-color: #ffffff;
-  border-radius: 8px;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-  padding: 30px;
-  width: 300px;
-}
-
-h2 {
+.text-center {
   color: #007bff;
 }
 
-label {
+.form-label {
   margin-top: 10px;
 }
 
-button {
+.btn_btn-primary {
   display: block;
   background-color: #007bff;
   color: white;
@@ -35,9 +20,9 @@ button {
   margin-top: 15px;
 }
 
-button:hover {
+.btn_btn-primary:hover {
   background-color: #0056b3;
-}
+} 
 
 .register-link {
   display: block;
@@ -49,5 +34,264 @@ button:hover {
 
 .register-link:hover {
   text-decoration: underline;
-} 
+}
 
+.simple-form {
+  margin-top: 200px;
+  margin-bottom: 200px;
+  margin-left: auto;
+  margin-right: auto;
+  background-color: #ffffff;
+  border-radius: 8px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  padding: 30px;
+  width: 300px;
+}
+
+/* Основні стилі */
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+a {
+  text-decoration: none;
+  color: inherit;
+}
+
+ul {
+  list-style: none;
+}
+
+/* Стилі хедеру та меню */
+
+.site-header {
+  height: 100vh;
+  background-image: url(./img/headerBackground.png);
+  background-repeat: repeat-x;
+  background-size: cover;
+  text-align: center;
+  color: white;
+}
+
+.site-nav {
+  width: 100%;
+  height: 50px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 5%;
+  position: fixed;
+  top: 30px;
+  background-color: #fff;
+}
+
+.logo {
+  font-family: 'Raleway', sans-serif;
+  font-weight: 800;
+  font-size: 30px;
+  margin: 0;
+  color: #1ab798;
+}
+
+.logo-link {
+  display: flex;
+  width: 30%;
+  align-items: center;;
+}
+
+.loding {
+  display: flex;
+  justify-content: center;
+  padding: 300px;
+}
+
+.logo-link img {
+  width: 50px;
+  height: 50px;
+}
+
+.nav-list {
+  display: flex;
+  width: 40%;
+  justify-content: space-around;
+  padding: 0;
+  margin: 0;
+}
+
+.nav-link {
+  font-family: 'Open Sans', sans-serif;
+  font-size: 1.2em;
+  color: #7e7c7e;
+  transition: .6s;
+  position: relative;
+  padding: 5px;
+}
+
+.nav-link:hover {
+  color: #303030;
+}
+
+.nav-link:hover::after {
+  content: '';
+  display: inline-block;
+  width: 100%;
+  height: 2px;
+  background-color: #1ab798;
+  position: absolute;
+  bottom: 0;
+  left: 0;
+}
+
+.main-title {
+  padding-top: 300px;
+  font-size: 55px;
+  font-family: 'Raleway', sans-serif;
+  font-weight: bold;
+  margin-bottom: 30px;
+  color: white;
+}
+
+.search-container {
+  text-align: center;
+  margin-top: 50px;
+}
+
+.search-box {
+  position: relative;
+  display: inline-block;
+  border-radius: 20px;
+  /* Заокруглені кути для поля вводу */
+  overflow: hidden;
+  /* Потрібно, щоб кнопка не виступала за межі поля вводу */
+}
+
+.search-input {
+  padding: 16px;
+  width: 700px;
+  border: none;
+  border-radius: 20px;
+  /* Заокруглені кути для поля вводу */
+  outline: none;
+  /* Видаляє зовнішній контур при фокусуванні */
+}
+
+.search-button {
+  padding: 12px 20px;
+  background-color: #1ab798;
+  color: #fff;
+  border: none;
+  cursor: pointer;
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  transition: background-color 0.3s ease;
+}
+
+.search-button:hover {
+  background-color: #1ab798;
+}
+
+.intro {
+  font-family: 'Open Sans', sans-serif;
+  font-weight: 600;
+  font-size: 18px;
+  margin-bottom: 21px;
+}
+
+/* Стилі футеру */
+.section-header {
+  font-size: 28px;
+  font-family: 'Raleway', sans-serif;
+  font-weight: bold;
+  text-align: center;
+  color: #1ab798;
+  padding-top: 60px;
+  margin-bottom: 32px;
+}
+
+.contacts-section {
+  background-image: url(./img/fon.png);
+  background-color: black;
+
+  border-top-left-radius: ;
+
+  background-repeat: no-repeat;
+  background-size: cover;
+  font-family: "Open Sans", sans-serif;
+  text-align: center;
+}
+
+.white-header {
+  margin-bottom: 60px;
+}
+
+.footer-text {
+  width: 40%;
+  font-family: "Open Sans", sans-serif;
+  font-size: 14px;
+  line-height: 24px;
+  color: #808080c7;
+  margin: 0 auto 40px auto;
+}
+
+.footer-link {
+  width: 43px;
+  height: 43px;
+  display: inline-block;
+  background-color: #3b5997;
+  background-repeat: no-repeat;
+  background-position: 50% 50%;
+  border-radius: 50%;
+
+  margin: 5px;
+}
+
+.footer-link:nth-of-type(1) {
+  background-image: url(./img/f.jpg);
+  background-color: #3ec2f3;
+}
+
+.footer-link:nth-of-type(2) {
+  background-image: url(./img/imgonline-com-ua-Resize-oHYMAkWWkoPI.jpg);
+  background-color: #3ec2f3;
+}
+
+.footer-link:nth-of-type(3) {
+  background-image: url(./img//tviter.jpg);
+  background-color: #007ab9;
+}
+
+.footer-socials {
+  margin-bottom: 40px;
+}
+
+.phone {
+  color: #bface2;
+  margin-bottom: 12px;
+}
+
+.mail {
+  color: #bface2;
+  margin-bottom: 50px;
+}
+
+hr {
+  margin-bottom: 25px;
+}
+
+.copyright {
+  font-family: "Open Sans", sans-serif;
+  font-size: 14px;
+  line-height: 2;
+  color: #808080c7;
+}
+
+.copyright {
+  margin: 0;
+  padding-bottom: 24px;
+  text-align: center;
+}

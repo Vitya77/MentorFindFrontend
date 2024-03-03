@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
-import './App.css';
+import { Link, Navigate } from 'react-router-dom';
 import * as Yup from 'yup';
-import config from './config'
+import config from '../config'
 
 const schema = Yup.object().shape({
   email: Yup.string().email()
@@ -9,7 +9,7 @@ const schema = Yup.object().shape({
 
 const serverURL = config.serverURL;
 
-const LoginForm = ({ switchToRegistration }) => {
+const LoginForm = () => {
     const [formData, setFormData] = useState({
         // Створіть стан для зберігання даних форми
         usernameOrEmail: '',
@@ -40,7 +40,7 @@ const LoginForm = ({ switchToRegistration }) => {
             password: formData.password
         });
 
-        fetch(`${serverURL}/users/login/`, {
+        await fetch(`${serverURL}/users/login/`, {
             method: 'POST',
             body: dataToSend,
             headers: {
@@ -54,20 +54,27 @@ const LoginForm = ({ switchToRegistration }) => {
                 return response.json();
             })
             .then(data => {
-                console.log(data);
-                
+                console.log(data.token);
+                localStorage.setItem('mentorFindToken', data.token);
             })
             .catch((error) => {
                 console.error('Error:', error);
             });
+
+        window.location.reload();
     };
 
+
+    if (localStorage.getItem('mentorFindToken') !== null) {
+        return <Navigate replace to="/" />;
+    }
     return (
         <div className="container">
-            <h2 className="text-center">Вхід на курс</h2>
+            <div className="simple-form">
+            <h2 className="text-center">Вхід в систему</h2>
             <form onSubmit={handleSubmit} method="post">
                 <div>
-                    <label htmlFor="username">Ім'я користувача або емейл:</label>
+                    <label className="form-label" htmlFor="username">Ім'я користувача або емейл:</label>
                     <input
                         type="text"
                         id="username"
@@ -80,7 +87,7 @@ const LoginForm = ({ switchToRegistration }) => {
                     {unauthorised && (<span style={{ color: 'red' }}>Неправильно введене ім'я користувача, емейл або пароль</span>)}
                 </div>
                 <div>
-                    <label htmlFor="password">Пароль:</label>
+                    <label className="form-label" htmlFor="password">Пароль:</label>
                     <input
                         type="password"
                         id="password"
@@ -96,9 +103,10 @@ const LoginForm = ({ switchToRegistration }) => {
                     Увійти
                 </button>
             </form>
-            <a className="register-link" onClick={switchToRegistration}>
+            <Link to="/registration" className="register-link">
                 Зареєструватися
-            </a>
+            </Link>
+            </div>
         </div>
     );
 }

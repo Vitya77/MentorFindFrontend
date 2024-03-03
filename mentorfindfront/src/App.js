@@ -1,23 +1,25 @@
-import React, { useState } from 'react';
+import React from 'react';
 import './App.css';
-import LoginForm from './Login';
-import RegistrationForm from './Registration';
+import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+import LoginForm from './components/Login';
+import RegistrationForm from './components/Registration';
+import Navigation from './components/Navigation';
+import Footer from './components/Footer';
+import MainPage from './components/MainPage';
 
 function App() {
-  const [showLogin, setShowLogin] = useState(true);
-
-  const switchToRegistration = () => {
-    setShowLogin(false);
-  };
+  //localStorage.clear(); // Це очищує токен з браузера користувача, залишив для тестування
 
   return (
-    <div>
-      {showLogin ? (
-        <LoginForm switchToRegistration={switchToRegistration} />
-      ) : (
-        <RegistrationForm />
-      )}
-    </div>
+    <Router>
+      <Navigation />
+      <Routes>
+        <Route path="/" element={<MainPage />} />
+        <Route path="/login" element={<LoginForm />} />
+        <Route path="/registration" element={<RegistrationForm />} />
+      </Routes>
+      <Footer />
+    </Router>
   );
 }
 

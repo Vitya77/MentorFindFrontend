@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
-import './App.css';
+import { Navigate } from 'react-router-dom';
 import * as Yup from 'yup';
-import config from './config'
+import config from '../config'
 
 const serverURL = config.serverURL;
 
@@ -70,7 +70,7 @@ function RegistrationForm() {
                 }
             );
 
-            fetch(`${serverURL}/users/register/`, {
+            await fetch(`${serverURL}/users/register/`, {
                 method: 'POST',
                 body: dataToSend,
                 headers: {
@@ -81,6 +81,7 @@ function RegistrationForm() {
                 .then(data => {
                     // Обробка відповіді з сервера
                     console.log('Success:', data);
+                    localStorage.setItem('mentorFindToken', data.token);
                 })
                 .catch((error) => {
                     console.error('Error:', error);
@@ -92,15 +93,20 @@ function RegistrationForm() {
             });
             setErrors(fieldErrors);
         }
+
+        window.location.reload();
     };
 
-
+    if (localStorage.getItem('mentorFindToken') !== null) {
+        return <Navigate replace to="/" />;
+    }
     return (
         <div className="container">
+            <div className="simple-form">
             <h2 className="text-center">Реєстрація на курс</h2>
             <form onSubmit={handleSubmit} method="post">
                 <div>
-                    <label htmlFor="username">Ім'я користувача:</label>
+                    <label className="form-label" htmlFor="username">Ім'я користувача:</label>
                     <input
                         type="text"
                         id="username"
@@ -113,7 +119,7 @@ function RegistrationForm() {
                     {errors.username && <span style={{ color: 'red' }}>{errors.username}</span>}
                 </div>
                 <div>
-                    <label htmlFor="email">Електронна пошта:</label>
+                    <label className="form-label" htmlFor="email">Електронна пошта:</label>
                     <input
                         type="email"
                         id="email"
@@ -126,7 +132,7 @@ function RegistrationForm() {
                     {errors.email && <span style={{ color: 'red' }}>{errors.email}</span>}
                 </div>
                 <div>
-                    <label htmlFor="password">Пароль:</label>
+                    <label className="form-label" htmlFor="password">Пароль:</label>
                     <input
                         type="password"
                         id="password"
@@ -139,7 +145,7 @@ function RegistrationForm() {
                     {errors.password && <span style={{ color: 'red' }}>{errors.password}</span>}
                 </div>
                 <div>
-                    <label htmlFor="confirm_password">Підтвердження паролю:</label>
+                    <label className="form-label" htmlFor="confirm_password">Підтвердження паролю:</label>
                     <input
                         type="password"
                         id="confirm_password"
@@ -151,10 +157,11 @@ function RegistrationForm() {
                     {errors.confirmPassword && <span style={{ color: 'red' }}>{errors.confirmPassword}</span>}
                     {!(formData.confirmPassword === formData.password || formData.confirmPassword === '') && <span style={{ color: 'red' }}>Паролі не співпадають</span>}
                 </div>
-                <button type="submit" className="btn btn-primary">
+                <button type="submit" className="btn btn-primary btn_btn-primary">
                     Зареєструватися
                 </button>
             </form>
+            </div>
         </div>
     );
 }
