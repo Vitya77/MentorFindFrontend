@@ -9,7 +9,7 @@ const schema = Yup.object().shape({
 
 const serverURL = config.serverURL;
 
-const LoginForm = () => {
+const LoginForm = ({NotAuthClick}) => {
     const [formData, setFormData] = useState({
         // Створіть стан для зберігання даних форми
         usernameOrEmail: '',
@@ -48,66 +48,73 @@ const LoginForm = () => {
             }
         })
             .then(response => {
-                if (response.status === 401) {
-                    setUnauthorised(true);
+                if (response.status === 200) {
+                    return response.json();
                 }
-                return response.json();
+                else {
+                    setUnauthorised(true);
+                    return;
+                }
             })
             .then(data => {
                 console.log(data.token);
                 localStorage.setItem('mentorFindToken', data.token);
+                NotAuthClick();
             })
             .catch((error) => {
                 console.error('Error:', error);
             });
-
-        window.location.reload();
     };
 
 
-    if (localStorage.getItem('mentorFindToken') !== null) {
+    if (localStorage.getItem('mentorFindToken') !== null && localStorage.getItem('mentorFindToken') !== "") {
         return <Navigate replace to="/" />;
     }
     return (
-        <div className="container">
-            <div className="simple-form">
-            <h2 className="text-center">Вхід в систему</h2>
-            <form onSubmit={handleSubmit} method="post">
-                <div>
-                    <label className="form-label" htmlFor="username">Ім'я користувача або емейл:</label>
-                    <input
-                        type="text"
-                        id="username"
-                        name="usernameOrEmail"
-                        className="form-control"
-                        required=""
-                        value={formData.usernameOrEmail}
-                        onChange={handleChange}
-                    />
-                    {unauthorised && (<span style={{ color: 'red' }}>Неправильно введене ім'я користувача, емейл або пароль</span>)}
-                </div>
-                <div>
-                    <label className="form-label" htmlFor="password">Пароль:</label>
-                    <input
-                        type="password"
-                        id="password"
-                        name="password"
-                        className="form-control"
-                        required=""
-                        value={formData.password}
-                        onChange={handleChange}
-                    />
-                    {unauthorised && (<span style={{ color: 'red' }}>Неправильно введене ім'я, емейл користувача або пароль</span>)}
-                </div>
-                <button type="submit" className="btn_btn-primary">
-                    Увійти
-                </button>
-            </form>
-            <Link to="/registration" className="register-link">
-                Зареєструватися
-            </Link>
+        <form onSubmit={handleSubmit} method="post" className="sign-in-form">
+            <h2 className="title">Sign in</h2>
+            <div className="input-field">
+                <i className="fas fa-user" />
+                <input 
+                    type="text" 
+                    placeholder="Ім'я користувача" 
+                    id="in-username"
+                    name="usernameOrEmail"
+                    value={formData.usernameOrEmail}
+                    onChange={handleChange}    
+                />
             </div>
-        </div>
+            {unauthorised && (<span className="error-span">Неправильно введене ім'я користувача, емейл або пароль</span>)}
+            <div className="input-field">
+                <i className="fas fa-lock" />
+                <input 
+                    type="password" 
+                    placeholder="Пароль" 
+                    id="in-password"
+                    name="password"
+                    value={formData.password}
+                    onChange={handleChange}    
+                />
+            </div>
+            {unauthorised && (<span className="error-span">Неправильно введене ім'я, емейл користувача або пароль</span>)}
+            <input type="submit" defaultValue="Login" className="btn solid" />
+            <p className="social-text">Or Sign in with social platforms</p>
+            <div className="social-media">
+                <a href="#" className="social-icon">
+                    <i className="fab fa-facebook-f" />
+                </a>
+                <a href="#" className="social-icon">
+                    <i className="fab fa-twitter" />
+                </a>
+                <a href="#" className="social-icon">
+                    <i className="fab fa-google" />
+                </a>
+                <a href="#" className="social-icon">
+                    <i className="fab fa-linkedin-in" />
+                </a>
+            </div>
+        </form>
+      
     );
 }
 

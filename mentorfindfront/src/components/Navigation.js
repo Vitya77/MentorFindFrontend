@@ -1,18 +1,21 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import Logo from "../img/logo1.svg"
+import LogoBlack from "../img/logo_black.svg";
+import LogoWhite from "../img/logo_white.svg";
 
-function Navigation() {
+
+const Navigation = ({signUpMode, navClasses, Logo, AuthClick, NotAuthClick}) => {
+  
     return (
-    <nav className="site-nav">
-        <Link to="/" className="logo-link">
-          <img src={Logo} alt="Logo" />
+      <nav className={`${navClasses} ${signUpMode}`} id="site-nav">
+        <Link to="/" className="logo-link" onClick={NotAuthClick}>
+          <img src={signUpMode !== "" ? LogoBlack : Logo} alt="Logo" />
           <h2 className="logo">MentorFind</h2>
         </Link>
         <ul className="nav-list">
           <li></li>
           <li className="nav-list-item">
-            <Link to="/" className="nav-link">
+            <Link to="/" className="nav-link" onClick={NotAuthClick}>
               <i
                 className="fa fa-home fa-fw"
                 style={{ fontSize: "1.3em" }}
@@ -22,24 +25,19 @@ function Navigation() {
             </Link>
           </li>
           <li className="nav-list-item">
-            <Link to="/" className="nav-link">
+            <Link to="/" className="nav-link" onClick={NotAuthClick}>
               Become tutor
             </Link>
           </li>
           {localStorage.getItem('mentorFindToken') === null ? (
-          <><li className="nav-list-item">
-            <Link to="/registration" className="nav-link">
-              Sign up
+          <li className="nav-list-item">
+            <Link to="/auth" className="nav-link" onClick={AuthClick}>
+              Sign in/Sign up
             </Link>
           </li>
-          <li className="nav-list-item">
-            <Link to="/login" className="nav-link">
-              Login
-            </Link>
-          </li></>
           ) : (
           <li className="nav-list-item">
-            <Link to="/" className="nav-link">
+            <Link to="/" className="nav-link" onClick={NotAuthClick}>
               <i
                 className="fa fa-user-circle-o"
                 style={{ fontSize: "1.5em" }}
@@ -52,5 +50,5 @@ function Navigation() {
       </nav>
     );
 }
-    
+
 export default Navigation;

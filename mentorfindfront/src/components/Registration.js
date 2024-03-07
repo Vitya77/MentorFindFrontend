@@ -8,7 +8,7 @@ const serverURL = config.serverURL;
 const validationSchema = Yup.object().shape({
     username: Yup.string()
         .required('Ім\'я користувача є обов\'язковим')
-        .min(5, 'Ім\'я користувача повинно містити щонайменше 5 символи'),
+        .min(5, 'Ім\'я користувача повинно містити щонайменше 5 символів'),
     email: Yup.string()
         .email('Введіть коректну електронну адресу')
         .required('Електронна адреса є обов\'язковою'),
@@ -22,7 +22,7 @@ const validationSchema = Yup.object().shape({
         .required('Підтвердження паролю є обов\'язковим')
 });
 
-function RegistrationForm() {
+const RegistrationForm = ({NotAuthClick}) => {
     const [formData, setFormData] = useState({
         username: '',
         email: '',
@@ -57,7 +57,7 @@ function RegistrationForm() {
 
         try {
             await validationSchema.validate(formData, { abortEarly: false });
-            
+
             if (formData.password !== formData.confirmPassword) {
                 return;
             }
@@ -77,11 +77,19 @@ function RegistrationForm() {
                     'Content-Type': 'application/json'
                 }
             })
-                .then(response => response.json())
+                .then(response => {
+                    if (response.status === 201) {
+                        return response.json()
+                    }
+                    else {
+                        return;
+                    }
+                })
                 .then(data => {
                     // Обробка відповіді з сервера
                     console.log('Success:', data);
                     localStorage.setItem('mentorFindToken', data.token);
+                    NotAuthClick();
                 })
                 .catch((error) => {
                     console.error('Error:', error);
@@ -93,76 +101,80 @@ function RegistrationForm() {
             });
             setErrors(fieldErrors);
         }
-
-        window.location.reload();
     };
 
     if (localStorage.getItem('mentorFindToken') !== null) {
         return <Navigate replace to="/" />;
     }
     return (
-        <div className="container">
-            <div className="simple-form">
-            <h2 className="text-center">Реєстрація на курс</h2>
-            <form onSubmit={handleSubmit} method="post">
-                <div>
-                    <label className="form-label" htmlFor="username">Ім'я користувача:</label>
-                    <input
-                        type="text"
-                        id="username"
-                        name="username"
-                        className="form-control"
-                        required=""
-                        value={formData.username}
-                        onChange={handleChange}
-                    />
-                    {errors.username && <span style={{ color: 'red' }}>{errors.username}</span>}
-                </div>
-                <div>
-                    <label className="form-label" htmlFor="email">Електронна пошта:</label>
-                    <input
-                        type="email"
-                        id="email"
-                        name="email"
-                        className="form-control"
-                        required=""
-                        value={formData.email}
-                        onChange={handleChange}
-                    />
-                    {errors.email && <span style={{ color: 'red' }}>{errors.email}</span>}
-                </div>
-                <div>
-                    <label className="form-label" htmlFor="password">Пароль:</label>
-                    <input
-                        type="password"
-                        id="password"
-                        name="password"
-                        className="form-control"
-                        required=""
-                        value={formData.password}
-                        onChange={handleChange}
-                    />
-                    {errors.password && <span style={{ color: 'red' }}>{errors.password}</span>}
-                </div>
-                <div>
-                    <label className="form-label" htmlFor="confirm_password">Підтвердження паролю:</label>
-                    <input
-                        type="password"
-                        id="confirm_password"
-                        name="confirmPassword"
-                        className="form-control"
-                        value={formData.confirmPassword}
-                        onChange={handleChange}
-                    />
-                    {errors.confirmPassword && <span style={{ color: 'red' }}>{errors.confirmPassword}</span>}
-                    {!(formData.confirmPassword === formData.password || formData.confirmPassword === '') && <span style={{ color: 'red' }}>Паролі не співпадають</span>}
-                </div>
-                <button type="submit" className="btn btn-primary btn_btn-primary">
-                    Зареєструватися
-                </button>
-            </form>
+        <form onSubmit={handleSubmit} method="post" className="sign-up-form">
+            <h2 className="title">Sign up</h2>
+            <div className="input-field">
+                <i className="fas fa-user" />
+                <input 
+                    type="text" 
+                    placeholder="Ім'я користувача" 
+                    id="up-username"
+                    name="username"
+                    value={formData.username}
+                    onChange={handleChange}    
+                />
             </div>
-        </div>
+            {errors.username && <span className="error-span">{errors.username}</span>}
+            <div className="input-field">
+                <i className="fas fa-envelope" />
+                <input 
+                    type="email" 
+                    placeholder="Електронна пошта"
+                    id="email"
+                    name="email"
+                    value={formData.email}
+                    onChange={handleChange} 
+                />
+            </div>
+            {errors.email && <span className="error-span">{errors.email}</span>}
+            <div className="input-field">
+                <i className="fas fa-lock" />
+                <input 
+                    type="password" 
+                    placeholder="Пароль" 
+                    id="up-password"
+                    name="password"
+                    value={formData.password}
+                    onChange={handleChange}
+                />
+            </div>
+            {errors.password && <span className="error-span">{errors.password}</span>}
+            <div className="input-field">
+                <i className="fas fa-lock" />
+                <input 
+                    type="password" 
+                    placeholder="Підтвердження паролю" 
+                    id="confirm_password"
+                    name="confirmPassword"
+                    value={formData.confirmPassword}
+                    onChange={handleChange}
+                />
+            </div>
+            {errors.confirmPassword && <span className="error-span">{errors.confirmPassword}</span>}
+            {!(formData.confirmPassword === formData.password || formData.confirmPassword === '') && <span className="error-span">Паролі не співпадають</span>}
+            <input type="submit" className="btn" defaultValue="Sign up" />
+            <p className="social-text">Or Sign up with social platforms</p>
+            <div className="social-media">
+                <a href="#" className="social-icon">
+                    <i className="fab fa-facebook-f" />
+                </a>
+                <a href="#" className="social-icon">
+                    <i className="fab fa-twitter" />
+                </a>
+                <a href="#" className="social-icon">
+                    <i className="fab fa-google" />
+                </a>
+                <a href="#" className="social-icon">
+                    <i className="fab fa-linkedin-in" />
+                </a>
+            </div>
+        </form>
     );
 }
 

@@ -3,7 +3,7 @@ import React from 'react';
 function Footer() {
     return (
     <footer className="contacts-section">
-      <div className="container">
+      <div className="footer-container">
         <h4 className="section-header white-header ">Get in touch with us</h4>
         <p className="footer-text">
           Lorem ipsum, dolor sit amet consectetur adipisicing elit. Ut fugiat
