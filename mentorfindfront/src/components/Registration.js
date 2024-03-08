@@ -3,9 +3,9 @@ import { Navigate } from 'react-router-dom';
 import * as Yup from 'yup';
 import config from '../config'
 
-const serverURL = config.serverURL;
+const serverURL = config.serverURL; // Constant to save server url
 
-const validationSchema = Yup.object().shape({
+const validationSchema = Yup.object().shape({ // Validation schema of all inputs
     username: Yup.string()
         .required('Ім\'я користувача є обов\'язковим')
         .min(5, 'Ім\'я користувача повинно містити щонайменше 5 символів'),
@@ -23,16 +23,18 @@ const validationSchema = Yup.object().shape({
 });
 
 const RegistrationForm = ({NotAuthClick, changeSuccessAuth}) => {
-    const [formData, setFormData] = useState({
+    /* Component of registration form */
+
+    const [formData, setFormData] = useState({ // State too save user input
         username: '',
         email: '',
         password: '',
         confirmPassword: ''
     });
 
-    const [errors, setErrors] = useState({});
+    const [errors, setErrors] = useState({}); // State to save validation errors
 
-    const handleChange = (event) => {
+    const handleChange = (event) => { // Function that is saving user input dynamically and checking validation
         const { name, value } = event.target;
 
         setFormData({
@@ -43,7 +45,7 @@ const RegistrationForm = ({NotAuthClick, changeSuccessAuth}) => {
         validateField(name, value);
     };
 
-    const validateField = async (name, value) => {
+    const validateField = async (name, value) => { // Function to validate field
         try {
             await Yup.reach(validationSchema, name).validate(value);
             setErrors({ ...errors, [name]: '' });
@@ -52,17 +54,17 @@ const RegistrationForm = ({NotAuthClick, changeSuccessAuth}) => {
         }
     };
 
-    const handleSubmit = async (e) => {
+    const handleSubmit = async (e) => { //Submitting function
         e.preventDefault();
 
         try {
-            await validationSchema.validate(formData, { abortEarly: false });
+            await validationSchema.validate(formData, { abortEarly: false }); // Validating fields, and if validation is not correct throw exception
 
-            if (formData.password !== formData.confirmPassword) {
+            if (formData.password !== formData.confirmPassword) { // Checking if confirmation of password is the same as password
                 return;
             }
 
-            const dataToSend = JSON.stringify(
+            const dataToSend = JSON.stringify( // Formation of what data to send to the server
                 {
                     "username": formData.username,
                     "email": formData.email,
@@ -70,7 +72,7 @@ const RegistrationForm = ({NotAuthClick, changeSuccessAuth}) => {
                 }
             );
 
-            await fetch(`${serverURL}/users/register/`, {
+            await fetch(`${serverURL}/users/register/`, { //Sending a request
                 method: 'POST',
                 body: dataToSend,
                 headers: {
@@ -78,7 +80,7 @@ const RegistrationForm = ({NotAuthClick, changeSuccessAuth}) => {
                 }
             })
                 .then(response => {
-                    if (response.status === 201) {
+                    if (response.status === 201) { // Checking if registration was successful
                         return response.json()
                     }
                     else {
@@ -86,16 +88,15 @@ const RegistrationForm = ({NotAuthClick, changeSuccessAuth}) => {
                     }
                 })
                 .then(data => {
-                    // Обробка відповіді з сервера
                     console.log('Success:', data);
-                    localStorage.setItem('mentorFindToken', data.token);
+                    localStorage.setItem('mentorFindToken', data.token); // Setting a session token
                     changeSuccessAuth();
-                    NotAuthClick();
+                    NotAuthClick();// All needed events after authorization
                 })
                 .catch((error) => {
                     console.error('Error:', error);
                 });
-        } catch (error) {
+        } catch (error) { // If validation is not correct change errors text
             const fieldErrors = {};
             error.inner.forEach(err => {
                 fieldErrors[err.path] = err.message;
@@ -104,10 +105,10 @@ const RegistrationForm = ({NotAuthClick, changeSuccessAuth}) => {
         }
     };
 
-    if (localStorage.getItem('mentorFindToken') !== null) {
+    if (localStorage.getItem('mentorFindToken') !== null && localStorage.getItem('mentorFindToken') !== "") { // If user is authenticated navigate to main page
         return <Navigate replace to="/" />;
     }
-    return (
+    return ( // If not, render the registration form
         <form onSubmit={handleSubmit} method="post" className="sign-up-form">
             <h2 className="title">Sign up</h2>
             <div className="input-field">

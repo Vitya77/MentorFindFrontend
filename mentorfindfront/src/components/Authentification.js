@@ -5,8 +5,9 @@ import RegisterImg from "../img/register.svg";
 import LoginImg from "../img/login.svg";
 
 const Auth = ({signUpModeFunc, NotAuthClick, changeSuccessAuth}) => {
+    /* Component of authorization page. It containes login and registration forms */
 
-    const [containerClasses, setContainerClasses] = useState("auth-container");
+    const [containerClasses, setContainerClasses] = useState("auth-container"); // State and two function to make animation when user switches to sign up or back
 
     const SignUpClick = (e) => {
         setContainerClasses("auth-container sign-up-mode");

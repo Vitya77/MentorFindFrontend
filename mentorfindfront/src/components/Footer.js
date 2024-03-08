@@ -1,6 +1,8 @@
 import React from 'react';
 
 function Footer() {
+    /* A component of footer */
+
     return (
     <footer className="contacts-section">
       <div className="footer-container">

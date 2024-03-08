@@ -1,6 +1,8 @@
 import React from 'react';
 
 function Main() {
+    /* A component of main page. It containes footer with search and the content of the main page */
+
     return (
     <div>
     <header className="site-header">

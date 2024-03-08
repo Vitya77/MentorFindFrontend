@@ -3,20 +3,21 @@ import { Link, Navigate } from 'react-router-dom';
 import * as Yup from 'yup';
 import config from '../config'
 
-const schema = Yup.object().shape({
+const schema = Yup.object().shape({ // Validation schema to decide if user entered email or username
   email: Yup.string().email()
 });
 
-const serverURL = config.serverURL;
+const serverURL = config.serverURL; // Constant to save server url
 
 const LoginForm = ({NotAuthClick, changeSuccessAuth}) => {
-    const [formData, setFormData] = useState({
-        // Створіть стан для зберігання даних форми
+    /* Component of loginform. It contains for mand all logic connected with it */
+
+    const [formData, setFormData] = useState({ // State too save user input
         usernameOrEmail: '',
         password: ''
     });
 
-    const handleChange = (event) => {
+    const handleChange = (event) => { // Function that is saving user input dynamically
         const { name, value } = event.target;
         setFormData({
             ...formData,
@@ -24,15 +25,15 @@ const LoginForm = ({NotAuthClick, changeSuccessAuth}) => {
         });
     };
 
-    const [unauthorised, setUnauthorised] = useState(false);
+    const [unauthorised, setUnauthorised] = useState(false); // State to check if user is authorized or not
 
-    const handleSubmit = async (e) => {
+    const handleSubmit = async (e) => { //Submitting function
         e.preventDefault();
 
         var isEmail = false;
-        isEmail = await schema.isValid({ email: formData.usernameOrEmail })
+        isEmail = await schema.isValid({ email: formData.usernameOrEmail }) // Checking if user entered email or username
 
-        const dataToSend = isEmail ? JSON.stringify({
+        const dataToSend = isEmail ? JSON.stringify({ // Deciding what to send to the server whether or not user entered email
             email: formData.usernameOrEmail,
             password: formData.password
         }) : JSON.stringify({
@@ -40,7 +41,7 @@ const LoginForm = ({NotAuthClick, changeSuccessAuth}) => {
             password: formData.password
         });
 
-        await fetch(`${serverURL}/users/login/`, {
+        await fetch(`${serverURL}/users/login/`, { //Sending a request
             method: 'POST',
             body: dataToSend,
             headers: {
@@ -48,7 +49,7 @@ const LoginForm = ({NotAuthClick, changeSuccessAuth}) => {
             }
         })
             .then(response => {
-                if (response.status === 200) {
+                if (response.status === 200) { //Checking if authorization was successful
                     return response.json();
                 }
                 else {
@@ -56,11 +57,11 @@ const LoginForm = ({NotAuthClick, changeSuccessAuth}) => {
                     return;
                 }
             })
-            .then(data => {
+            .then(data => { 
                 console.log(data.token);
-                localStorage.setItem('mentorFindToken', data.token);
+                localStorage.setItem('mentorFindToken', data.token); // Setting a session token
                 changeSuccessAuth();
-                NotAuthClick();
+                NotAuthClick(); // All needed events after authorization
             })
             .catch((error) => {
                 console.error('Error:', error);
@@ -68,17 +69,17 @@ const LoginForm = ({NotAuthClick, changeSuccessAuth}) => {
     };
 
 
-    if (localStorage.getItem('mentorFindToken') !== null && localStorage.getItem('mentorFindToken') !== "") {
+    if (localStorage.getItem('mentorFindToken') !== null && localStorage.getItem('mentorFindToken') !== "") { // If user is authenticated navigate to main page
         return <Navigate replace to="/" />;
     }
-    return (
+    return ( // If not, render the login form
         <form onSubmit={handleSubmit} method="post" className="sign-in-form">
             <h2 className="title">Sign in</h2>
             <div className="input-field">
                 <i className="fas fa-user" />
                 <input 
                     type="text" 
-                    placeholder="Ім'я користувача" 
+                    placeholder="Ім'я користувача або емейл" 
                     id="in-username"
                     name="usernameOrEmail"
                     value={formData.usernameOrEmail}

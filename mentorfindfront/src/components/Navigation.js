@@ -6,6 +6,8 @@ import LogoWhite from "../img/logo_white.svg";
 
 const Navigation = ({signUpMode, navClasses, Logo, AuthClick, NotAuthClick}) => {
   
+    /* A component of navbar */
+
     return (
       <nav className={`${navClasses} ${signUpMode}`} id="site-nav">
         <Link to="/" className="logo-link" onClick={NotAuthClick}>
