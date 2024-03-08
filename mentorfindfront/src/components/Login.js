@@ -9,7 +9,7 @@ const schema = Yup.object().shape({
 
 const serverURL = config.serverURL;
 
-const LoginForm = ({NotAuthClick}) => {
+const LoginForm = ({NotAuthClick, changeSuccessAuth}) => {
     const [formData, setFormData] = useState({
         // Створіть стан для зберігання даних форми
         usernameOrEmail: '',
@@ -59,6 +59,7 @@ const LoginForm = ({NotAuthClick}) => {
             .then(data => {
                 console.log(data.token);
                 localStorage.setItem('mentorFindToken', data.token);
+                changeSuccessAuth();
                 NotAuthClick();
             })
             .catch((error) => {

@@ -4,7 +4,7 @@ import RegistrationForm from './Registration';
 import RegisterImg from "../img/register.svg";
 import LoginImg from "../img/login.svg";
 
-const Auth = ({signUpModeFunc, NotAuthClick}) => {
+const Auth = ({signUpModeFunc, NotAuthClick, changeSuccessAuth}) => {
 
     const [containerClasses, setContainerClasses] = useState("auth-container");
 
@@ -22,8 +22,8 @@ const Auth = ({signUpModeFunc, NotAuthClick}) => {
         <div className={containerClasses}>
             <div className="forms-container">
                 <div className="signin-signup">
-                    <LoginForm NotAuthClick={NotAuthClick}/>
-                    <RegistrationForm NotAuthClick={NotAuthClick}/>
+                    <LoginForm NotAuthClick={NotAuthClick} changeSuccessAuth={changeSuccessAuth}/>
+                    <RegistrationForm NotAuthClick={NotAuthClick} changeSuccessAuth={changeSuccessAuth}/>
                 </div>
             </div>
             <div className="panels-container">

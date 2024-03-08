@@ -22,7 +22,7 @@ const validationSchema = Yup.object().shape({
         .required('Підтвердження паролю є обов\'язковим')
 });
 
-const RegistrationForm = ({NotAuthClick}) => {
+const RegistrationForm = ({NotAuthClick, changeSuccessAuth}) => {
     const [formData, setFormData] = useState({
         username: '',
         email: '',
@@ -89,6 +89,7 @@ const RegistrationForm = ({NotAuthClick}) => {
                     // Обробка відповіді з сервера
                     console.log('Success:', data);
                     localStorage.setItem('mentorFindToken', data.token);
+                    changeSuccessAuth();
                     NotAuthClick();
                 })
                 .catch((error) => {
