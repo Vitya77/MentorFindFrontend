@@ -441,7 +441,7 @@ form.sign-in-form {
     border-radius: 50%;
     display: block;
     stroke-width: 3;
-    stroke: #4bb71b;
+    stroke: #1f92f7;
     stroke-miterlimit: 10;
     box-shadow: inset 0px 0px 0px #4bb71b;
     animation: fill .4s ease-in-out .4s forwards, scale .3s ease-in-out .9s both;
@@ -452,7 +452,7 @@ form.sign-in-form {
     stroke-dashoffset: 166;
     stroke-width: 3;
     stroke-miterlimit: 10;
-    stroke: #4bb71b;
+    stroke: #1f92f7;
     fill: #fff;
     animation: stroke 0.6s cubic-bezier(0.65, 0, 0.45, 1) forwards;
 }
@@ -541,10 +541,11 @@ ul {
 /* Стилі хедеру та меню */
 
 .site-header {
-  height: 100vh;
-  background-image: url(./img/headerBackground.png);
-  background-repeat: repeat-x;
-  background-size: cover;
+  height: 90vh;
+  background: linear-gradient(0deg, #4481eb 0%, #1f92f7 100%);
+  border-bottom-left-radius: 50% 90%;
+  border-bottom-right-radius: 50% 90%;
+  box-shadow: 0 0 30px #4481eb;
   text-align: center;
   color: white;
 }
@@ -595,7 +596,7 @@ ul {
   font-weight: 800;
   font-size: 30px;
   margin: 0;
-  color: #1ab798;
+  color: #1f92f7;
 }
 
 .logo-link {
@@ -641,24 +642,33 @@ ul {
   display: inline-block;
   width: 100%;
   height: 2px;
-  background-color: #1ab798;
+  background-color: #1f92f7;
   position: absolute;
   bottom: 0;
   left: 0;
 }
 
+.logout {
+  display: absolute;
+  width: 30vw;
+  height: 250px;
+  top: 200px;
+  left: 35vw;
+  background-color: #fff;
+  border-radius: 30px;
+}
+
 .main-title {
-  padding-top: 300px;
+  padding-top: 230px;
   font-size: 55px;
   font-family: 'Raleway', sans-serif;
   font-weight: bold;
-  margin-bottom: 30px;
   color: white;
 }
 
 .search-container {
   text-align: center;
-  margin-top: 50px;
+  margin-top: 30px;
 }
 
 .search-box {
@@ -682,19 +692,17 @@ ul {
 
 .search-button {
   padding: 12px 20px;
-  background-color: #1ab798;
+  background-color: #1f92f7;
   color: #fff;
-  border: none;
+  border: 3px solid #fff;
+  border-top-right-radius: 20px;
+  border-bottom-right-radius: 20px;
   cursor: pointer;
   position: absolute;
   top: 0;
   right: 0;
   bottom: 0;
   transition: background-color 0.3s ease;
-}
-
-.search-button:hover {
-  background-color: #1ab798;
 }
 
 .intro {
@@ -704,22 +712,73 @@ ul {
   margin-bottom: 21px;
 }
 
+.main-content {
+  margin-top: 30vh;
+}
+
+/* Стилі блоку з користями */
+
+.benefits {
+  margin-top: 10vh;
+  display: flex;
+  justify-content: space-between;
+}
+
+.benefits-title {
+  display: block;
+  color:#444;
+  width: 100%;
+  text-align: center;
+}
+
+.benefit {
+  padding: 100px;
+  display: flex;
+  width: 45%;
+  flex-direction: column;
+  align-items: center;
+}
+
+.benefit > h3 {
+  display: block;
+  width: 100%;
+  text-align: center;
+}
+
+.benefit > ul {
+  display: block;
+  width: 80%;
+}
+
+.benefit > ul > li {
+  display: block;
+  padding: 5px;
+}
+
+.students-benefits {
+  color: #fff;
+  background: linear-gradient(0deg, #4481eb 0%, #1f92f7 100%);
+  border-top-right-radius: 50% 50%;
+  border-bottom-right-radius: 50% 50%;
+  box-shadow: 0 0 30px #4481eb;
+}
+
 /* Стилі футеру */
 .section-header {
   font-size: 28px;
   font-family: 'Raleway', sans-serif;
   font-weight: bold;
   text-align: center;
-  color: #1ab798;
+  color: #fff;
   padding-top: 60px;
   margin-bottom: 32px;
 }
 
 .contacts-section {
-  background-image: url(./img/fon.png);
-  background-color: black;
-  background-repeat: no-repeat;
-  background-size: cover;
+  background: linear-gradient(0deg, #4481eb 0%, #1f92f7 100%);
+  box-shadow: 0 0 30px #4481eb;
+  border-top-left-radius: 50% 20%;
+  border-top-right-radius: 50% 20%;
   font-family: "Open Sans", sans-serif;
   text-align: center;
 }
@@ -733,7 +792,7 @@ ul {
   font-family: "Open Sans", sans-serif;
   font-size: 14px;
   line-height: 24px;
-  color: #808080c7;
+  color: #fff;
   margin: 0 auto 40px auto;
 }
 
@@ -741,27 +800,13 @@ ul {
   width: 43px;
   height: 43px;
   display: inline-block;
-  background-color: #3b5997;
-  background-repeat: no-repeat;
-  background-position: 50% 50%;
   border-radius: 50%;
-
   margin: 5px;
 }
 
-.footer-link:nth-of-type(1) {
-  background-image: url(./img/f.jpg);
-  background-color: #3ec2f3;
-}
-
-.footer-link:nth-of-type(2) {
-  background-image: url(./img/imgonline-com-ua-Resize-oHYMAkWWkoPI.jpg);
-  background-color: #3ec2f3;
-}
-
-.footer-link:nth-of-type(3) {
-  background-image: url(./img//tviter.jpg);
-  background-color: #007ab9;
+.footer-link > i {
+  font-size: 35px;
+  color: #fff;
 }
 
 .footer-socials {
@@ -769,12 +814,12 @@ ul {
 }
 
 .phone {
-  color: #bface2;
+  color: #fff;
   margin-bottom: 12px;
 }
 
 .mail {
-  color: #bface2;
+  color: #fff;
   margin-bottom: 50px;
 }
 
@@ -786,7 +831,7 @@ hr {
   font-family: "Open Sans", sans-serif;
   font-size: 14px;
   line-height: 2;
-  color: #808080c7;
+  color: #fff;
 }
 
 .copyright {

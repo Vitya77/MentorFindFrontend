@@ -12,9 +12,9 @@ function Footer() {
           laboriosam esse. Ratione, ea totam.
         </p>
         <div className="footer-socials">
-          <a href="/" className="footer-link" />
-          <a href="/" className="footer-link" />
-          <a href="/" className="footer-link" />
+          <a href="/" className="footer-link"><i className="fa-brands fa-facebook" /></a>
+          <a href="/" className="footer-link"><i className="fa-brands fa-twitter" /></a>
+          <a href="/" className="footer-link"><i className="fa-brands fa-telegram" /></a> 
         </div>
         <p className="phone">+xx_xxx_xxx_xx</p>
         <p className="mail">googleapis@gmail.com</p>
