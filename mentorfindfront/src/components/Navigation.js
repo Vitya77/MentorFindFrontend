@@ -1,12 +1,28 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import LogoBlack from "../img/logo_black.svg";
-import LogoWhite from "../img/logo_white.svg";
+import Modal from 'react-bootstrap/Modal';
+import Button from 'react-bootstrap/Button';
 
 
 const Navigation = ({signUpMode, navClasses, Logo, AuthClick, NotAuthClick}) => {
   
     /* A component of navbar */
+
+    const [showModal, setShowModal] = useState(false);
+
+    const handleShowModal = () => {
+      setShowModal(true);
+    };
+
+    const handleCloseModal = () => {
+      setShowModal(false);
+    };
+
+    const LogOut = () => {
+      localStorage.clear();
+      handleCloseModal();
+    } 
 
     return (
       <nav className={`${navClasses} ${signUpMode}`} id="site-nav">
@@ -38,6 +54,7 @@ const Navigation = ({signUpMode, navClasses, Logo, AuthClick, NotAuthClick}) => 
             </Link>
           </li>
           ) : (
+            <>
           <li className="nav-list-item">
             <Link to="/" className="nav-link" onClick={NotAuthClick}>
               <i
@@ -47,6 +64,28 @@ const Navigation = ({signUpMode, navClasses, Logo, AuthClick, NotAuthClick}) => 
               />
             </Link>
           </li>
+          <li className="nav-list-item">
+            <button className="nav-link" onClick={handleShowModal}>
+              <i
+                className="fa-solid fa-arrow-right-from-bracket"
+                style={{ fontSize: "1.5em" }}
+                aria-hidden="true"
+              />
+            </button>
+            <Modal show={showModal} onHide={handleCloseModal}>
+              <Modal.Header closeButton>
+                <Modal.Title style = {{fontSize: "1.2em"}}>Ви впевнені, що хочете вийти з акаунту?</Modal.Title>
+              </Modal.Header>
+              <Modal.Footer>
+                <Button variant="secondary" onClick={handleCloseModal} style = {{fontSize: "1em", width: "100px", height: "40px", margin: "10px"}}>
+                  Ні
+                </Button>
+                <Button variant="primary" onClick={LogOut} style = {{fontSize: "1em", width: "100px", height: "40px", margin: "10px"}}>
+                  Так
+                </Button>
+              </Modal.Footer>
+            </Modal>
+          </li></>
           )}
         </ul>
       </nav>
