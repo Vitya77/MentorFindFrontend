@@ -934,7 +934,24 @@ hr {
   position: absolute;
   left: 0;
   top: 0;
-  width: (var(--rating)/5) * 100%; /* Заповнення наполовину */
+  width: (var(--rating)/5) * 100%; 
   overflow: hidden;
-  color: gold; /* Колір заповнення */
+  color: gold; 
+}
+
+/* Стилі сторінки 404 */
+
+.not-found-container {
+  height: 90vh;
+  background: linear-gradient(0deg, #4481eb 0%, #1f92f7 100%);
+  border-bottom-left-radius: 50% 90%;
+  border-bottom-right-radius: 50% 90%;
+  box-shadow: 0 0 30px #4481eb;
+  text-align: center;
+  color: white;
+  margin-bottom: 10vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
 }
