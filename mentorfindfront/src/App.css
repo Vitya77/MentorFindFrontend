@@ -567,6 +567,7 @@ ul {
 .site-nav.auth-site-nav {
   top: 0;
   background: none;
+  position: absolute;
 }
 
 .site-nav.auth-site-nav > .logo-link > .logo {
@@ -838,4 +839,102 @@ hr {
   margin: 0;
   padding-bottom: 24px;
   text-align: center;
+}
+
+/* Стилі сторінки пошуку */
+
+.search-header {
+  height: 35vh;
+  background: linear-gradient(0deg, #4481eb 0%, #1f92f7 100%);
+  border-bottom-left-radius: 50% 90%;
+  border-bottom-right-radius: 50% 90%;
+  box-shadow: 0 0 30px #4481eb;
+  text-align: center;
+  color: white;
+  overflow: auto;
+}
+
+.search-container.search-page {
+  position: relative;
+  margin-top: 20vh;
+}
+
+.search-content {
+  width: 100%;
+  margin-top: 10vh;
+  margin-bottom: 10vh;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  grid-template-rows: auto;
+}
+
+.mini-advert {
+  margin: 10px;
+  width: 90%;
+  margin-right: auto;
+  margin-left: auto;
+  border-radius: 24px;
+  border: 2px solid #4481eb;
+  background: #FFF;
+  box-shadow: 7px 7px 7px 0px #4481eb;
+  padding: 10px;
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr 1fr 1fr;
+  grid-template-rows: 1fr 0.7fr 1fr;
+}
+
+.mini-advert:hover {
+  border: 2px solid #1f6aec;
+  box-shadow: 7px 7px 7px 0px #1f6aec;
+}
+
+.mini-teacher-photo {
+  width: 150px;
+  height: 150px;
+  border-radius: 16px;
+  grid-row: span 3;
+}
+
+.mini-title {
+  grid-column: span 3;
+  display: flex;
+  align-items: center;
+  height: 100%;
+}
+
+.mini-category {
+  display: flex;
+  align-items: center;
+}
+
+.mini-description {
+  grid-column: span 4;
+  font-size: 14px;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 3; /* Кількість ліній, після яких текст буде обрізаний */
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.mini-rating {
+  display: flex;
+  align-items: center;
+}
+
+.star {
+  position: relative;
+  display: inline-block;
+  color: silver;
+  font-size: 20px;
+  --rating: 0;
+}
+.star::before {
+  content: '★★★★★';
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: (var(--rating)/5) * 100%; /* Заповнення наполовину */
+  overflow: hidden;
+  color: gold; /* Колір заповнення */
 }

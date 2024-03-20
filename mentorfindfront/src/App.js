@@ -4,6 +4,7 @@ import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import Navigation from './components/Navigation';
 import Footer from './components/Footer';
 import MainPage from './components/MainPage';
+import SearchPage from './components/SearchPage';
 import Auth from './components/Authentification';
 import AuthSuccMessage from './components/AuthSuccessMessage';
 import LogoBlack from "./img/logo_black.svg";
@@ -53,6 +54,7 @@ function App() {
       <Routes>
         <Route path="/" element={<MainPage />} />
         <Route path="/auth" element={<Auth signUpModeFunc={changeSignUpMode} NotAuthClick={NotAuthClick} changeSuccessAuth={changeSuccessAuth}/>} />
+        <Route path="/search" element={<SearchPage />} />
       </Routes>
       {SuccessAuth && <AuthSuccMessage/>}
       <Footer />
