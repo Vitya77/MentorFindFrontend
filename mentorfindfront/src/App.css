@@ -927,14 +927,14 @@ hr {
   display: inline-block;
   color: silver;
   font-size: 20px;
-  --rating: 0;
+  --rating: 0%;
 }
 .star::before {
   content: '★★★★★';
   position: absolute;
   left: 0;
   top: 0;
-  width: (var(--rating)/5) * 100%; 
+  width: var(--rating); 
   overflow: hidden;
   color: gold; 
 }

@@ -5,10 +5,6 @@ const serverURL = config.serverURL;
 
 function MiniAdvert({title, rating, price, location, type, description, category}) {
 
-    const ratingStyle = {
-        '--rating': rating
-    };
-
     function whatType(type) {
         if (type === null) {
             return "Онлайн/Офлайн";
@@ -26,7 +22,7 @@ function MiniAdvert({title, rating, price, location, type, description, category
             <div className="mini-teacher-photo"></div>
             <h3 className="mini-title">{title}</h3>
             <div className="mini-rating">
-                <div className="star" style={ratingStyle}>★★★★★</div>
+                <div className="star" style={{'--rating': `${rating/5 * 100}%`}}>★★★★★</div>
             </div>
             <div className="mini-category">${price}</div>
             <div className="mini-category">{location}</div>
