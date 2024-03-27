@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Link, Navigate } from 'react-router-dom';
 import * as Yup from 'yup';
-import config from '../config'
+import config from '../config';
 
 const schema = Yup.object().shape({ // Validation schema to decide if user entered email or username
   email: Yup.string().email()

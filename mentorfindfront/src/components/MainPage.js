@@ -1,7 +1,15 @@
-import React from 'react';
+import React, { useState } from 'react';
+import { Link } from 'react-router-dom';
 
 function Main() {
     /* A component of main page. It contains footer with search and the content of the main page */
+
+    const [search, setSearch] = useState("");
+
+    function handleSearchChange(e) {
+      const { value } = e.target;
+      setSearch(value);
+    }
 
     return (
     <div>
@@ -9,17 +17,18 @@ function Main() {
         <h1 className="main-title">MentorFind</h1>
         <p>Допоможемо знайти кращого репетитора серед наших спеціалістів</p>
         <div className="search-container">
-          <form action="/search" method="get">
+          <form>
             <div className="search-box">
               <input
                 className="search-input"
                 type="text"
                 placeholder="Знайти репетитора..."
                 name="search"
+                onChange={handleSearchChange}
               />
-              <button className="search-button" type="submit">
+              <Link to={"/search/?q=" + search} className="search-button">
                 Пошук
-              </button>
+              </Link>
             </div>
           </form>
         </div>
