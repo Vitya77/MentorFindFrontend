@@ -43,7 +43,7 @@ const Navigation = ({signUpMode, navClasses, Logo, AuthClick, NotAuthClick}) => 
             </Link>
           </li>
           <li className="nav-list-item">
-            <Link to="/" className="nav-link" onClick={NotAuthClick}>
+            <Link to="/advertform" className="nav-link" onClick={AuthClick}>
               Become tutor
             </Link>
           </li>

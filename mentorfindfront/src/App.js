@@ -5,6 +5,7 @@ import Navigation from './components/Navigation';
 import Footer from './components/Footer';
 import MainPage from './components/MainPage';
 import SearchPage from './components/SearchPage';
+import AdvertForm from './components/AdvertForm';
 import Auth from './components/Authentification';
 import AuthSuccMessage from './components/AuthSuccessMessage';
 import NotFound from './components/NotFoundPage';
@@ -56,6 +57,7 @@ function App() {
         <Route path="/" element={<MainPage />} />
         <Route path="/auth" element={<Auth signUpModeFunc={changeSignUpMode} NotAuthClick={NotAuthClick} changeSuccessAuth={changeSuccessAuth}/>} />
         <Route path="/search" element={<SearchPage />} />
+        <Route path="/advertform" element={<AdvertForm />} />
         <Route path="*" element={<NotFound />} />
       </Routes>
       {SuccessAuth && <AuthSuccMessage/>}
