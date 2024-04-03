@@ -1,6 +1,7 @@
 import React, {useState} from 'react';
 import './App.css';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+import Modal from 'react-bootstrap/Modal';
 import Navigation from './components/Navigation';
 import Footer from './components/Footer';
 import MainPage from './components/MainPage';
@@ -49,15 +50,36 @@ function App() {
     }, 5000);
   }
 
+  const [showAdvertCreated, setshowAdvertCreated] = useState(false);
+
+  const handleShowAdvertCreated = () => {
+    setshowAdvertCreated(true);
+    setTimeout(function() {
+      setshowAdvertCreated(false);
+    }, 3000);
+  };
+
+  const handleCloseAdvertCreated = () => {
+    setshowAdvertCreated(false);
+  };
+
   //A page that will be showed
   return (
     <Router>
       <Navigation signUpMode={navSignUpMode} navClasses={navClasses} Logo={Logo} AuthClick={AuthClick} NotAuthClick={NotAuthClick}/>
+      <Modal show={showAdvertCreated} onHide={handleCloseAdvertCreated}>
+        <Modal.Header closeButton>
+          <Modal.Title style={{display: 'flex', 'alignItems': 'center'}}>
+            <svg className="checkmark" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 52 52"><circle className="checkmark__circle" cx="26" cy="26" r="25" fill="none" /><path className="checkmark__check" fill="none" d="M14.1 27.2l7.1 7.2 16.7-16.8" /></svg>
+            <span style={{'fontSize': '1.2rem', 'margin-left': '10px'}}>Ви успішно створили оголошення!</span>
+          </Modal.Title>
+        </Modal.Header>
+      </Modal>
       <Routes>
         <Route path="/" element={<MainPage />} />
         <Route path="/auth" element={<Auth signUpModeFunc={changeSignUpMode} NotAuthClick={NotAuthClick} changeSuccessAuth={changeSuccessAuth}/>} />
         <Route path="/search" element={<SearchPage />} />
-        <Route path="/advertform" element={<AdvertForm />} />
+        <Route path="/advertform" element={<AdvertForm onCreating={handleShowAdvertCreated} NotAuthClick={NotAuthClick}/>} />
         <Route path="*" element={<NotFound />} />
       </Routes>
       {SuccessAuth && <AuthSuccMessage/>}
