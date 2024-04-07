@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import config from '../config';
-import MiniAdvert from './MiniAdvert';
+import Review from './Review';
 import { useLocation } from 'react-router-dom';
 
 const serverURL = config.serverURL;
@@ -54,6 +54,15 @@ function AdvertPage() {
                 </div>
                 <div id="advert-reviews" className="advert-reviews">
                     <h2>Відгуки</h2>
+                    <div className="reviews-container">
+                        <Review />
+                        <Review />
+                        <Review />
+                    </div>
+                    <div className="review-buttons">
+                        <button className="reviews-load">Показати більше</button>
+                        <button className="new-review">Залишити відгук</button>
+                    </div>
                 </div>
             </div>
         </div>

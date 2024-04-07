@@ -1063,9 +1063,59 @@ hr {
 }
 
 .advert-reviews {
-  height: 100vh;
   border: 3px solid #1f92f7;
   padding: 20px 50px;
   border-radius: 30px;
   margin: 20px;
+}
+
+.review-buttons > button {
+  width: 300px;
+  background-color: #5995fd;
+  border: none;
+  outline: none;
+  height: 49px;
+  border-radius: 49px;
+  color: #fff;
+  text-transform: uppercase;
+  font-weight: 600;
+  margin: 10px 0;
+  cursor: pointer;
+  transition: 0.5s;
+  padding: 5px 20px;
+  grid-column: span 2;
+}
+
+.review-buttons > button:hover {
+  color: #444;
+}
+
+.review-buttons {
+  display: flex;
+  justify-content: space-around;
+}
+
+/* Стилі відгуку */
+
+.reviews-container {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+}
+
+.review {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  padding: 20px;
+  border-radius: 30px;
+  border: 1px solid #444;
+  margin-top: 20px;
+  margin: 10px;
+}
+
+.review-username {
+  font-size: 20px;
+}
+
+.review-text {
+  grid-column: span 2;
 }
