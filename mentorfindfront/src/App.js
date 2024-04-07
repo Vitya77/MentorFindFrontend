@@ -8,6 +8,7 @@ import SearchPage from './components/SearchPage';
 import Auth from './components/Authentification';
 import AuthSuccMessage from './components/AuthSuccessMessage';
 import NotFound from './components/NotFoundPage';
+import AdvertPage from './components/AdvertPage';
 import LogoBlack from "./img/logo_black.svg";
 import LogoWhite from "./img/logo_white.svg";
 
@@ -56,6 +57,7 @@ function App() {
         <Route path="/" element={<MainPage />} />
         <Route path="/auth" element={<Auth signUpModeFunc={changeSignUpMode} NotAuthClick={NotAuthClick} changeSuccessAuth={changeSuccessAuth}/>} />
         <Route path="/search" element={<SearchPage />} />
+        <Route path="/advert" element={<AdvertPage />} />
         <Route path="*" element={<NotFound />} />
       </Routes>
       {SuccessAuth && <AuthSuccMessage/>}

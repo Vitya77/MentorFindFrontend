@@ -557,8 +557,8 @@ ul {
   justify-content: space-between;
   align-items: center;
   padding: 0 5%;
-  position: fixed;
-  top: 30px;
+  position: relative;
+  top: 0;
   background-color: #fff;
   z-index: 999;
   transition: 0.5s ease-in-out;
@@ -954,4 +954,118 @@ hr {
   align-items: center;
   justify-content: center;
   flex-direction: column;
+}
+
+/* Стилі оголошення */
+
+.advert-page {
+  padding-top: 50px;
+  display: flex;
+}
+
+.advert-left-side {
+  width: 100%;
+  height: auto;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  position: sticky;
+  top: 20px;
+}
+
+.advert-left-side-container {
+  width: 20%;
+}
+
+.advert-image {
+  width: 200px;
+  height: 200px;
+  border-radius: 50%;
+  box-shadow: 0 0 15px #1f92f7;
+  margin-bottom: 50px;
+}
+
+.advert-link {
+  display: block;
+  width: 90%;
+  height: 50px;
+  text-align: center;
+  text-justify: center;
+  margin-top: 20px;
+  font-size: 20px;
+  padding: 10px;
+  border-radius: 20px;
+  transition: 0.5s;
+}
+
+.advert-link:hover {
+  color: white;
+  background-color: #1f92f7;
+}
+
+.advert-right-side {
+  width: 80%;
+}
+
+.advert-userinfo {
+  width: 100%;
+  height: 200px;
+  padding: 30px 10px;
+}
+
+.advert-username {
+  font-size: 30px;
+  text-justify: center;
+  color: #1f92f7;
+}
+
+.advert-email {
+  font-size: 20px;
+  text-justify: center;
+  color: #1f6aec;
+}
+
+.advert-information {
+  display: grid;
+  border: 3px solid #1f92f7;
+  padding: 20px 50px;
+  border-radius: 30px;
+  grid-template-columns: 1fr 1fr;
+  margin: 20px;
+}
+
+.advert-information-child {
+  padding: 10px;
+}
+
+.advert-title {
+  font-size: 30px;
+}
+
+.advert-information > .star {
+  text-justify: center;
+  font-size: 30px;
+}
+
+.advert-category {
+  font-size: 20px;
+}
+
+.advert-about {
+  border: 3px solid #1f92f7;
+  padding: 20px 50px;
+  border-radius: 30px;
+  margin: 20px;
+}
+
+.advert-description {
+  font-size: 20px;
+}
+
+.advert-reviews {
+  height: 100vh;
+  border: 3px solid #1f92f7;
+  padding: 20px 50px;
+  border-radius: 30px;
+  margin: 20px;
 }
