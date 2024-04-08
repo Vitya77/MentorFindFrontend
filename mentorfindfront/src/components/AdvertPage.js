@@ -59,9 +59,16 @@ function AdvertPage() {
                         <Review />
                         <Review />
                     </div>
-                    <div className="review-buttons">
-                        <button className="reviews-load">Показати більше</button>
-                        <button className="new-review">Залишити відгук</button>
+                    <button className="reviews-load">Показати більше...</button>
+                    <div className="review-form">
+                        <h4>Оцініть курс</h4>
+                        <div className="star" style={{}}>★★★★★</div>
+                        <input type="text" placeholder="Написати відгук.."/>
+                        <span class="highlight"></span>
+                        <span class="bar"></span>
+                        <div className="send-review-button-container">
+                            <i className="fa-solid fa-paper-plane send-review-button"></i>
+                        </div>
                     </div>
                 </div>
             </div>
