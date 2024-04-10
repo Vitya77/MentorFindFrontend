@@ -112,6 +112,7 @@ form.sign-in-form {
   font-size: 0.8rem;
   color: red;
   z-index: 1;
+  grid-column: span 2;
 }
 
 .social-text {
@@ -895,6 +896,13 @@ hr {
   grid-row: span 3;
 }
 
+.mini-teacher-photo > img {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  border: 2px solid #1f6aec;
+}
+
 .mini-title {
   grid-column: span 3;
   display: flex;
@@ -954,4 +962,209 @@ hr {
   align-items: center;
   justify-content: center;
   flex-direction: column;
+}
+
+/* Стилі форми заповнення оголошення */
+
+.advert-form-container {
+  height: 100vh;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  overflow: hidden;
+}
+
+.advert-form-container::before {
+  content: "";
+  background-image: linear-gradient(-45deg, #4481eb 0%, #04befe 100%);
+  box-shadow: 0 0 30px #4481eb;
+  border-radius: 50%;
+  width: 2000px;
+  height: 2000px;
+  z-index: -1;
+  position: absolute;
+  top: -10%;
+  right: 48%;
+  transform: translateY(-50%);
+}
+
+.advert-form {
+  height: 80vh;
+  width: 90%;
+  display: grid;
+  grid-template-columns: 1fr 1fr 2fr;
+  grid-template-rows: 1fr 1fr 1fr 1fr 1fr;
+  padding: 2rem;
+  background-color: white;
+  border-radius: 30px;
+  border: #f0f0f0 solid 20px;
+  margin-top: 5vh;
+}
+
+.title.advert {
+  grid-column: span 3;
+}
+
+.input-field.advert-long {
+  grid-column: span 2;
+  max-width: 90%;
+}
+
+.input-field.advert-long.description {
+  height: 150px;
+  border-radius: 30px;
+}
+
+.input-field.advert-short {
+  max-width: 80%;
+}  
+
+.learning-type-input {
+  background-color: #f0f0f0;
+  color: #aaa;
+  border: none;
+  border-radius: 55px;
+}
+
+.learning-type-input > span {
+  line-height: 55px;
+}
+
+.learning-type-input:after {
+  position: absolute;
+  content: "";
+  top: 45%;
+  right: 10px;
+  width: 0;
+  height: 0;
+  border: 6px solid transparent;
+  border-color: #aaa transparent transparent transparent;
+}
+
+.learning-type-input.open:after {
+  border-color: transparent transparent #aaa transparent;
+  top: 40%;
+  z-index: 1;
+}
+
+.learning-type-input.open > .learning-type-options {
+  display: block;
+  position: relative;
+  top: -10px;
+  z-index: 1;
+}
+
+.learning-type-options {
+  background-color: #f0f0f0;
+  display: none;
+  border: 1px solid black;
+  border-top: none;
+}
+
+.learning-type-option {
+  padding: 0.5rem;
+  color: #333;
+}
+
+.learning-type-option:hover {
+  background-color: #1f92f7;
+  color: white;
+}
+
+.description-input {
+  background-color: #f0f0f0;
+  border-radius: 30px;
+  border: none;
+  padding: 0.5rem;
+  font-size: 1.1rem;
+  align-self: center;
+  height: 150px;
+  resize: none;
+}
+
+.description-input::placeholder {
+  color: #aaa;
+  font-weight: 500;
+}
+
+input[type="file"] {
+  display: none;
+}
+
+.input-field.image {
+  grid-row: span 4;
+  max-width: 100%;
+  height: 96%;
+  padding: 1rem;
+  border-radius: 40px;
+}
+
+.drop-file {
+  grid-column: span 2;
+  border: #333 dashed 2px;
+  border-radius: 30px;
+  display: flex;
+  justify-content:center;
+  align-items:center;
+  flex-direction: column;
+}
+
+.drop-file > i {
+  font-size: 60px;
+}
+
+.drop-file > img {
+  width: 250px;
+  height: 250px;
+  border: 10px solid #aaa;
+}
+
+.custom-file-upload {
+  margin-top: 10px;
+  font-family: "Poppins", sans-serif;
+  font-size: 20px;
+  color: #333;
+  font-weight: 500;
+  cursor: pointer;
+  text-align: center;
+  width: 70%;
+}
+
+.custom-file-upload > span {
+  font-weight: 900;
+}
+
+.input-button {
+  width: 300px;
+  background-color: #5995fd;
+  border: none;
+  outline: none;
+  height: 49px;
+  border-radius: 49px;
+  color: #fff;
+  text-transform: uppercase;
+  font-weight: 600;
+  margin: 10px 0;
+  cursor: pointer;
+  transition: 0.5s;
+  padding: 5px 20px;
+  grid-column: span 2;
+}
+
+.input-button:hover {
+  background-color: #4d84e2;
+  color: #333;
+}
+
+#advert-create-btn {
+  position: relative;
+  bottom: 0;
+  left: 0;
+}
+
+.sign-in-form.advert {
+  width: 100%;
+  padding: 0;
 }

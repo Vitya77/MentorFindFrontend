@@ -30,6 +30,7 @@ function Search() {
       })
       .then(data => { 
           setData(data);
+          console.log(data);
       })
       .catch((error) => {
           console.error('Error:', error);
@@ -65,7 +66,7 @@ function Search() {
     <div className="search-content">
         {/* Картінка, ім'я автора, ціна, локація, тип уроку, рейтинг */}
         {data.map(dictionary => (
-          <MiniAdvert key={dictionary.id} title={dictionary.title} rating={dictionary.avarage_rating ? dictionary.avarage_rating : 0} price={dictionary.price} location={dictionary.location} type={dictionary.type_of_lesson} description={dictionary.description} category={dictionary.category} />
+          <MiniAdvert key={dictionary.id} title={dictionary.title} image={dictionary.image} rating={dictionary.avarage_rating ? dictionary.avarage_rating : 0} price={dictionary.price} location={dictionary.location} type={dictionary.type_of_lesson} description={dictionary.description} category={dictionary.category} />
         ))}
     </div>
     </>

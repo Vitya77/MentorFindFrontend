@@ -3,7 +3,7 @@ import config from '../config';
 
 const serverURL = config.serverURL;
 
-function MiniAdvert({title, rating, price, location, type, description, category}) {
+function MiniAdvert({title, image, rating, price, location, type, description, category}) {
 
     function whatType(type) {
         if (type === null) {
@@ -19,7 +19,9 @@ function MiniAdvert({title, rating, price, location, type, description, category
 
     return (
         <div className="mini-advert">
-            <div className="mini-teacher-photo"></div>
+            <div className="mini-teacher-photo">
+                <img src={image} />
+            </div>
             <h3 className="mini-title">{title}</h3>
             <div className="mini-rating">
                 <div className="star" style={{'--rating': `${rating/5 * 100}%`}}>★★★★★</div>
