@@ -3,16 +3,18 @@ import config from '../config';
 
 const serverURL = config.serverURL;
 
-function Review() {
+function Review({author_username, rating, text, animation}) {
     
     return (
-        <div className="review">
+        <div className={`review ${animation ? 'animation' : ''}`}>
             <div className="review-username">
-                IvanFranCo
+                {author_username}
             </div>
-            <div className="star">★★★★★</div>
+            <div>
+                <div className="star" style={{'--rating': `${rating/5*100}%`}}>★★★★★</div>
+            </div>
             <div className="review-text">
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. 
+                {text}
             </div>
         </div>
     );

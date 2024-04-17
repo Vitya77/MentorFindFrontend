@@ -1112,6 +1112,24 @@ hr {
   margin: 10px;
 }
 
+.review.animation {
+  animation: review_animation 2s ease-in-out;
+}
+
+@keyframes review_animation {
+  10% {
+    border: 1px solid #04befe;
+    box-shadow: 0 0 10px #04befe;
+  }
+  70% {
+    border: 1px solid #04befe;
+    box-shadow: 0 0 10px #04befe;
+  }
+  100% {
+    box-shadow: none;
+  }
+}
+
 .review-username {
   font-size: 20px;
 }
