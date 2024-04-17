@@ -57,7 +57,7 @@ function App() {
         <Route path="/" element={<MainPage />} />
         <Route path="/auth" element={<Auth signUpModeFunc={changeSignUpMode} NotAuthClick={NotAuthClick} changeSuccessAuth={changeSuccessAuth}/>} />
         <Route path="/search" element={<SearchPage />} />
-        <Route path="/advert" element={<AdvertPage />} />
+        <Route path="/advert/*" element={<AdvertPage />} />
         <Route path="*" element={<NotFound />} />
       </Routes>
       {SuccessAuth && <AuthSuccMessage/>}
