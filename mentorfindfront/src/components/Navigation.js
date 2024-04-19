@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import LogoBlack from "../img/logo_black.svg";
+import LogoBlue from "../img/logo_blue.svg";
 import Modal from 'react-bootstrap/Modal';
 import Button from 'react-bootstrap/Button';
 
@@ -27,7 +27,7 @@ const Navigation = ({signUpMode, navClasses, Logo, AuthClick, NotAuthClick}) => 
     return (
       <nav className={`${navClasses} ${signUpMode}`} id="site-nav">
         <Link to="/" className="logo-link" onClick={NotAuthClick}>
-          <img src={signUpMode !== "" ? LogoBlack : Logo} alt="Logo" />
+          <img src={signUpMode !== "" ? LogoBlue : Logo} alt="Logo" />
           <h2 className="logo">MentorFind</h2>
         </Link>
         <ul className="nav-list">

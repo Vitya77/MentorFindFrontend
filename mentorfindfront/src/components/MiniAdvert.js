@@ -1,9 +1,7 @@
-import React, { useState } from 'react';
-import config from '../config';
+import React from 'react';
+import { Link } from 'react-router-dom';
 
-const serverURL = config.serverURL;
-
-function MiniAdvert({title, image, rating, price, location, type, description, category}) {
+function MiniAdvert({advert_id, title, image, rating, price, location, type, description, category}) {
 
     function whatType(type) {
         if (type === null) {
@@ -18,7 +16,7 @@ function MiniAdvert({title, image, rating, price, location, type, description, c
     }
 
     return (
-        <div className="mini-advert">
+        <Link to={`/advert/${advert_id}`} className="mini-advert">
             <div className="mini-teacher-photo">
                 <img src={image} />
             </div>
@@ -31,7 +29,7 @@ function MiniAdvert({title, image, rating, price, location, type, description, c
             <div className="mini-category">{whatType(type)}</div>
             <div className="mini-category">{category}</div>
             <div className="mini-description">{description}</div>
-        </div>
+        </Link>
     );
 }
     

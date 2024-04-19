@@ -10,7 +10,8 @@ import AdvertForm from './components/AdvertForm';
 import Auth from './components/Authentification';
 import AuthSuccMessage from './components/AuthSuccessMessage';
 import NotFound from './components/NotFoundPage';
-import LogoBlack from "./img/logo_black.svg";
+import AdvertPage from './components/AdvertPage';
+import LogoBlue from "./img/logo_blue.svg";
 import LogoWhite from "./img/logo_white.svg";
 
 function App() {
@@ -28,7 +29,7 @@ function App() {
 
   //This two states and two functions are used to change navbar style depending on whate page is user on
   const [navClasses, setNavClasses] = useState(window.location.pathname === "/auth" ? "site-nav auth-site-nav" : "site-nav");
-  const [Logo, setLogo] = useState(window.location.pathname === "/auth" ? LogoWhite : LogoBlack);
+  const [Logo, setLogo] = useState(window.location.pathname === "/auth" ? LogoWhite : LogoBlue);
 
   const AuthClick = (e) => {
     setNavClasses("site-nav auth-site-nav");
@@ -38,7 +39,7 @@ function App() {
   const NotAuthClick = (e) => {
     setNavClasses("site-nav");
     setNavSignUpMode("");
-    setLogo(LogoBlack);
+    setLogo(LogoBlue);
   }
 
   //This state with function is used to display and hide massage about successful authentification 
@@ -79,6 +80,7 @@ function App() {
         <Route path="/" element={<MainPage />} />
         <Route path="/auth" element={<Auth signUpModeFunc={changeSignUpMode} NotAuthClick={NotAuthClick} changeSuccessAuth={changeSuccessAuth}/>} />
         <Route path="/search" element={<SearchPage />} />
+        <Route path="/advert/*" element={<AdvertPage />} />
         <Route path="/advertform" element={<AdvertForm onCreating={handleShowAdvertCreated} NotAuthClick={NotAuthClick}/>} />
         <Route path="*" element={<NotFound />} />
       </Routes>
