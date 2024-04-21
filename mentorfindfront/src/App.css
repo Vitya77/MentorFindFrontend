@@ -1374,6 +1374,7 @@ hr {
   align-self: center;
   height: 150px;
   resize: none;
+  outline: none;
 }
 
 .description-input::placeholder {
