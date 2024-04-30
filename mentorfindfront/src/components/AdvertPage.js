@@ -3,6 +3,7 @@ import config from '../config';
 import Review from './Review';
 import NotFound from './NotFoundPage';
 import * as Yup from 'yup';
+import AdvertSelect from './AdvertSelect';
 
 const serverURL = config.serverURL;
 
@@ -235,6 +236,7 @@ function AdvertPage() {
                     <div>
                         <div className="advert-information-child star" style={{'--rating': `${advertData.average_rating/5 * 100}%`}}>★★★★★</div>
                     </div>
+                    <AdvertSelect />
                     <div className="advert-information-child advert-category">
                         {advertData.category}
                     </div>

@@ -27,7 +27,7 @@ const validationSchema = Yup.object().shape({ // Validation schema of all inputs
         .required('Обов\'язкове поле')
 });
 
-const AdvertForm = ({NotAuthClick, onCreating}) => {
+const AdvertForm = ({NotAuthClick, onCreating, editingMode}) => {
 
     const [isSelectOpen, setIsSelectOpen] = useState(false);
 
@@ -170,7 +170,7 @@ const AdvertForm = ({NotAuthClick, onCreating}) => {
     return (
         <div className="advert-form-container">
             <div className="advert-form" onClick={CloseSelect}>
-                <h2 className="title advert">Створіть оголошення</h2>
+                <h2 className="title advert">{`${editingMode ? "Редагувати" : "Створіть"} оголошення`}</h2>
                 <div className="input-field advert-long">
                     <i className="fas fa-heading" />
                     <input type="text" placeholder="Заголовок оголошення" className="title-input" name="title" value={formData.title} onChange={handleDataChange}/>
@@ -224,7 +224,7 @@ const AdvertForm = ({NotAuthClick, onCreating}) => {
                     {errors.description && <span className="error-span">{errors.description}</span>}
                 </div>
                 <button className="input-button" id="advert-create-btn" onClick={handleSubmit}>
-                    Створити оголошенння
+                    {`${editingMode ? "Редагувати" : "Створити"} оголошенння`}
                 </button>
             </div>
         </div>

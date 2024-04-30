@@ -56,7 +56,7 @@ const Navigation = ({signUpMode, navClasses, Logo, AuthClick, NotAuthClick}) => 
           ) : (
             <>
           <li className="nav-list-item">
-            <Link to="/" className="nav-link" onClick={NotAuthClick}>
+            <Link to="/profile" className="nav-link" onClick={NotAuthClick}>
               <i
                 className="fa fa-user-circle-o"
                 style={{ fontSize: "1.5em" }}
