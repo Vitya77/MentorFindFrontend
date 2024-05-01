@@ -1348,6 +1348,48 @@ hr {
 .input-field.advert-long.description {
   height: 150px;
   border-radius: 30px;
+  position: relative;
+}
+
+.input-field.advert-long.description > .ai-text-button {
+  position: absolute;
+  bottom: 10px;
+  left: 10px;
+  height: 34px;
+  width: 34px;
+  border-radius: 17px;
+  padding: 0 6px;
+  background-color: #5995fd;
+  border: none;
+  color: white;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  transition: linear 0.3s;
+  cursor: pointer;
+}
+
+.input-field.advert-long.description > .ai-text-button > i {
+  line-height: 30px;
+  color: white;
+}
+
+.input-field.advert-long.description > .ai-text-button > span {
+  margin-left: 10px;
+  white-space: nowrap;
+}
+
+.input-field.advert-long.description > .ai-text-button:hover {
+  width: 180px;
+  background-color: #4d84e2;
+}
+
+.input-field.advert-long.description > .generating-anim {
+  position: absolute;
+  top: 40%;
+  left: 50%;
+  line-height: 40px;
+  font-size: 40px;
 }
 
 .input-field.advert-short {

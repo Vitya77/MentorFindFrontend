@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import config from '../config'
 import * as Yup from 'yup';
 import { Navigate } from 'react-router-dom';
@@ -82,7 +82,7 @@ const AdvertForm = ({NotAuthClick, onCreating, editingMode}) => {
             await Yup.reach(validationSchema, name).validate(value);
             setErrors({ ...errors, [name]: '' });
         } catch (error) {
-            setErrors({ ...errors, [name]: error.message });
+            await setErrors({ ...errors, [name]: error.message });
         }
     };
 
@@ -164,6 +164,52 @@ const AdvertForm = ({NotAuthClick, onCreating, editingMode}) => {
         }
     };
 
+    const [isDescrGenerating, setIsDescrGenerating] = useState(false);
+
+    const generateText = async () => {
+
+        if (formData.title === '' ?? formData.category === '' ?? formData.location === '' ?? formData.price < 1 ?? formData.type === 'Тип навчання') {
+            setErrors({
+                ...errors, 
+                ['title']: 'Вкажіть це поле',
+                ['location']: 'Вкажіть це поле',
+                ['category']: 'Вкажіть це поле',
+                ['price']: 'Вкажіть це поле',
+                ['type']: 'Вкажіть це поле',
+            });
+            return;
+        }
+
+        setFormData({
+            ...formData,
+            ['description']: ''
+        });
+        setIsDescrGenerating(true);
+
+        fetch(`${serverURL}/ai/getText/?c=Придумай опис до оголошення про репетиторство в населеному пункті ${formData.location} з заголовком ${formData.title} з категорії ${formData.category} і з типом навчання ${formData.type} та ціною ${formData.price}`, { 
+            method: 'GET',
+            headers: {
+                'Authorization': `Token ${localStorage.getItem('mentorFindToken')}`
+            }
+        })
+            .then(response => {
+                if (response.status === 200) {
+                    return response.json();
+                }
+            })
+            .then(data => {
+                console.log(data);
+                setIsDescrGenerating(false);
+                setFormData({
+                    ...formData,
+                    ['description']: data.content
+                });
+            })
+            .catch((error) => {
+                console.error('Error:', error);
+            });
+    }
+
     if (isCreated) { 
         return <Navigate replace to="/" />;
     }
@@ -220,7 +266,9 @@ const AdvertForm = ({NotAuthClick, onCreating, editingMode}) => {
                 </div>
                 <div className="input-field advert-long description">
                     <i className="fas fa-info-circle" />
-                    <textarea id="info" name="description" className="description-input" placeholder="Розкажіть про себе і свій курс" value={formData.description}  onChange={handleDataChange}/>
+                    <textarea id="info" name="description" className="description-input" placeholder={isDescrGenerating ? "" : "Розкажіть про себе і свій курс"} value={formData.description}  onChange={handleDataChange}/>
+                    <div className="ai-text-button" onClick={generateText}><i className="fa-solid fa-robot " /><span>Згенерувати з ШІ</span></div>
+                    {isDescrGenerating && <i className="fa-solid fa-spinner fa-spin-pulse generating-anim" />}
                     {errors.description && <span className="error-span">{errors.description}</span>}
                 </div>
                 <button className="input-button" id="advert-create-btn" onClick={handleSubmit}>
