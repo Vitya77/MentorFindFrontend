@@ -50,11 +50,16 @@ const AdvertForm = ({NotAuthClick, onCreating, editingMode}) => {
         validateField('type', e.target.innerText);
     };
 
-    const [file, setFile] = useState(null);
+    function CustomCreateURL(url_or_file) {
+        try {
+            return URL.createObjectURL(url_or_file);
+        }
+        catch {
+            return url_or_file;
+        }
+    }
 
     const handleFileChange = (event) => {
-        setFile(event.target.files[0]);
-
         setFormData({
             ...formData,
             ['image']: event.target.files[0]
@@ -65,8 +70,6 @@ const AdvertForm = ({NotAuthClick, onCreating, editingMode}) => {
 
     const handleDrop = (e) => {
         e.preventDefault();
-        setFile(e.dataTransfer.files[0]);
-
         setFormData({
             ...formData,
             ['image']: e.dataTransfer.files[0]
@@ -131,7 +134,7 @@ const AdvertForm = ({NotAuthClick, onCreating, editingMode}) => {
             dataToSend.append("category", formData.category);
             dataToSend.append("price", parseFloat(formData.price).toFixed(2));
             dataToSend.append("description", formData.description);
-            dataToSend.append("image", file);
+            dataToSend.append("image", formData.image);
             dataToSend.append("author", 1);
             dataToSend.append("location", formData.location);
             if (type_of_lesson !== null) {
@@ -198,7 +201,6 @@ const AdvertForm = ({NotAuthClick, onCreating, editingMode}) => {
                 }
             })
             .then(data => {
-                console.log(data);
                 setIsDescrGenerating(false);
                 setFormData({
                     ...formData,
@@ -210,11 +212,78 @@ const AdvertForm = ({NotAuthClick, onCreating, editingMode}) => {
             });
     }
 
+    const [isImageGenerating, setIsImageGenerating] = useState(false);
+
+    const [generatedImages, setGeneratedImages] = useState([]);
+
+    const generateImage = async () => {
+
+        if (formData.title === '' ?? formData.category === '' ?? formData.location === '' ?? formData.price < 1 ?? formData.type === 'Тип навчання') {
+            setErrors({
+                ...errors, 
+                ['title']: 'Вкажіть це поле',
+                ['location']: 'Вкажіть це поле',
+                ['category']: 'Вкажіть це поле',
+                ['price']: 'Вкажіть це поле',
+                ['type']: 'Вкажіть це поле',
+            });
+            return;
+        }
+
+        setFormData({
+            ...formData,
+            ['image']: null
+        });
+
+        setIsImageGenerating(true);
+
+        fetch(`${serverURL}/ai/getPhoto/?p=Згенеруй фон для оголошення про репетиторство в населеному пункті ${formData.location} з заголовком ${formData.title} з категорії ${formData.category} і з типом навчання ${formData.type} та ціною ${formData.price}`, { 
+            method: 'GET',
+            headers: {
+                'Authorization': `Token ${localStorage.getItem('mentorFindToken')}`
+            }
+        })
+            .then(response => {
+                if (response.status === 200) {
+                    return response.json();
+                }
+            })
+            .then(data => {
+                setIsImageGenerating(false);
+                setGeneratedImages(data.slice(0, 4));
+            })
+            .catch((error) => {
+                console.error('Error:', error);
+            });
+    }
+
+    const selectImage = async (e) => {
+        setFormData({
+            ...formData,
+            ['image']: e.target.src
+        });
+    }
+
+    const hideChoosingImage = () => {
+        setGeneratedImages([]);
+    }
+
     if (isCreated) { 
         return <Navigate replace to="/" />;
     }
     return (
         <div className="advert-form-container">
+            {generatedImages.length !== 0 && <div className="choosing-image">
+                <h2>Виберіть зображення</h2>
+                <div className="images">
+                    {generatedImages.map(image => (
+                        <div className={`image-container ${formData.image === image ? 'selected' : ''}`}>
+                            <img src={image} onClick={selectImage}/>
+                        </div>
+                    ))}
+                </div>
+                <button className="select-image" onClick={hideChoosingImage}>Підтвердити</button>
+            </div>}
             <div className="advert-form" onClick={CloseSelect}>
                 <h2 className="title advert">{`${editingMode ? "Редагувати" : "Створіть"} оголошення`}</h2>
                 <div className="input-field advert-long">
@@ -224,7 +293,7 @@ const AdvertForm = ({NotAuthClick, onCreating, editingMode}) => {
                 </div>
                 <div className="input-field image">
                     <div className="drop-file" onDragOver={(e) => e.preventDefault()} onDrop={handleDrop}>
-                        {file ? <img src={URL.createObjectURL(file)} alt="Advert"/> : <i className="fa-solid fa-file-arrow-up" />}
+                        {formData.image ? <img src={CustomCreateURL(formData.image)} alt="Advert"/> : (isImageGenerating ? <i className="fa-solid fa-spinner fa-spin-pulse" /> : <i className="fa-solid fa-file-arrow-up" />)}
                         <label className="custom-file-upload">
                             Виберіть <span>фото 1×1</span> для оголошення або перетягніть його сюди 
                             <input
@@ -234,6 +303,7 @@ const AdvertForm = ({NotAuthClick, onCreating, editingMode}) => {
                                 onChange={handleFileChange}
                             />
                         </label>
+                        <div className="ai-button" onClick={generateImage}><i className="fa-solid fa-robot " /><span>Згенерувати з ШІ</span></div>
                         {errors.image && <span className="error-span">{errors.image}</span>}
                     </div>
                 </div>
@@ -267,7 +337,7 @@ const AdvertForm = ({NotAuthClick, onCreating, editingMode}) => {
                 <div className="input-field advert-long description">
                     <i className="fas fa-info-circle" />
                     <textarea id="info" name="description" className="description-input" placeholder={isDescrGenerating ? "" : "Розкажіть про себе і свій курс"} value={formData.description}  onChange={handleDataChange}/>
-                    <div className="ai-text-button" onClick={generateText}><i className="fa-solid fa-robot " /><span>Згенерувати з ШІ</span></div>
+                    <div className="ai-button" onClick={generateText}><i className="fa-solid fa-robot " /><span>Згенерувати з ШІ</span></div>
                     {isDescrGenerating && <i className="fa-solid fa-spinner fa-spin-pulse generating-anim" />}
                     {errors.description && <span className="error-span">{errors.description}</span>}
                 </div>

@@ -39,18 +39,18 @@ const Navigation = ({signUpMode, navClasses, Logo, AuthClick, NotAuthClick}) => 
                 style={{ fontSize: "1.3em" }}
                 aria-hidden="true"
               />
-              &nbsp; Home
+              &nbsp; Головна
             </Link>
           </li>
           <li className="nav-list-item">
             <Link to="/advertform" className="nav-link" onClick={AuthClick}>
-              Become tutor
+              Додати оголошення
             </Link>
           </li>
           {localStorage.getItem('mentorFindToken') === null ? (
           <li className="nav-list-item">
             <Link to="/auth" className="nav-link" onClick={AuthClick}>
-              Sign in/Sign up
+              Увійти/Зареєструватись
             </Link>
           </li>
           ) : (
