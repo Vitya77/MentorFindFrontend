@@ -250,7 +250,31 @@ const AdvertForm = ({NotAuthClick, onCreating, editingMode}) => {
             })
             .then(data => {
                 setIsImageGenerating(false);
-                setGeneratedImages(data.slice(0, 4));
+
+                function dataURItoFile(dataURI, filename) {
+                    // Розділення строки на частини
+                    let arr = dataURI.split(','), 
+                        mime = arr[0].match(/:(.*?);/)[1],
+                        bstr = atob(arr[1]), 
+                        n = bstr.length, 
+                        u8arr = new Uint8Array(n);
+                        
+                    // Перетворення бінарної строки у масив байтів
+                    while(n--) {
+                      u8arr[n] = bstr.charCodeAt(n);
+                    }
+                  
+                    // Створення файлу
+                    return new File([u8arr], filename, {type:mime});
+                  }
+                  
+                let files = [];
+                  // Використання функції
+                data.forEach(function(file) {
+                    files.push(dataURItoFile(file, 'generated_image.png'));
+                });
+
+                setGeneratedImages(files.slice(0, 4));
             })
             .catch((error) => {
                 console.error('Error:', error);
@@ -260,7 +284,7 @@ const AdvertForm = ({NotAuthClick, onCreating, editingMode}) => {
     const selectImage = async (e) => {
         setFormData({
             ...formData,
-            ['image']: e.target.src
+            ['image']: generatedImages[e.target.id]
         });
     }
 
@@ -278,7 +302,7 @@ const AdvertForm = ({NotAuthClick, onCreating, editingMode}) => {
                 <div className="images">
                     {generatedImages.map(image => (
                         <div className={`image-container ${formData.image === image ? 'selected' : ''}`}>
-                            <img src={image} onClick={selectImage}/>
+                            <img id={generatedImages.indexOf(image)} src={CustomCreateURL(image)} onClick={selectImage}/>
                         </div>
                     ))}
                 </div>
