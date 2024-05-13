@@ -1,6 +1,9 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import LogoBlue from "../img/logo_blue.svg";
 import MiniAdvert from './MiniAdvert';
+import config from '../config';
+
+const serverURL = config.serverURL;
 
 function ProfilePage() {
 
@@ -13,7 +16,81 @@ function ProfilePage() {
     const changeToNonEditUser = () => {
         setEditUserState(false);
     }
+
+    const [selectedAdvertsData, setSelectedAdvertsData] = useState([]);
     
+    const GetSelectedAdverts = () => {
+        fetch(`${serverURL}/selected/getSelectAd/`, { //Sending a request
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Token ${localStorage.getItem('mentorFindToken')}`
+            }
+          })
+          .then(response => {
+              return response.json();
+          })
+          .then(data => { 
+              console.log(data);
+              setSelectedAdvertsData(data);
+          })
+          .catch((error) => {
+              console.error('Error:', error);
+          });
+    }
+
+    const [refreshSelected, setRefreshSelected] = useState(0);
+
+    useEffect(() => {
+        GetSelectedAdverts();
+      }, [refreshSelected]);
+
+    const [viewHistoryData, setViewHistoryData] = useState([]);
+
+    const GetViewHistory = () => {
+        fetch(`${serverURL}/viewhistory/`, { //Sending a request
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Token ${localStorage.getItem('mentorFindToken')}`
+            }
+          })
+          .then(response => {
+              return response.json();
+          })
+          .then(data => { 
+              console.log(data);
+              setViewHistoryData(data);
+          })
+          .catch((error) => {
+              console.error('Error:', error);
+          });
+    }
+
+    const [refreshViewHistory, setRefreshViewHistory] = useState(0);
+
+    useEffect(() => {
+        GetViewHistory();
+      }, [refreshViewHistory]);
+
+    const ClearViewHistory = () => {
+        fetch(`${serverURL}/viewhistory/del-full-viewhistory/`, { //Sending a request
+            method: 'DELETE',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Token ${localStorage.getItem('mentorFindToken')}`
+            }
+          })
+          .then(response => {
+              if (response.status === 204) {
+                setRefreshViewHistory((refreshViewHistory + 1)%2);
+              }
+          })
+          .catch((error) => {
+              console.error('Error:', error);
+          });
+    }
+
     return (
         <div className="profile-page-container">
             <div className="profile-background"></div>
@@ -90,10 +167,10 @@ function ProfilePage() {
                         <h1 className="profile-category-title"> Вибрані оголошення</h1>
                         <div className="profile-bar"></div>
                         <div className="profile-advert-container">
-                            <MiniAdvert image={LogoBlue} title="Математика" rating={0} price={100} location={"Львів"} type={false} description={"Дуже чудове репетиторство"} category={"Математика"} showHeart={true}/>
-                            <MiniAdvert image={LogoBlue} title="Математика" rating={0} price={100} location={"Львів"} type={false} description={"Дуже чудове репетиторство"} category={"Математика"} showHeart={true}/>
-                            <MiniAdvert image={LogoBlue} title="Математика" rating={0} price={100} location={"Львів"} type={false} description={"Дуже чудове репетиторство"} category={"Математика"} showHeart={true}/>
-                            
+                            {selectedAdvertsData.map(dictionary => (
+                                <MiniAdvert refreshing={refreshSelected} setRefreshing={setRefreshSelected} advert_id={dictionary.id} image={dictionary.image} title={dictionary.title} rating={dictionary.average_rating ? dictionary.average_rating : 0} price={dictionary.price} location={dictionary.location} type={dictionary.type_of_lesson} description={dictionary.description} category={dictionary.category} showHeart={true}/>
+                            ))}
+                            {selectedAdvertsData.length === 0 && <span className="no-adverts-message">Немає вибраних оголошень</span>}
                         </div>
                     </div>
                     <div className="profile-category" id="profile-history-advert">
@@ -101,11 +178,11 @@ function ProfilePage() {
                         <h1 className="profile-category-title"> Історія переглядів</h1>
                         <div className="profile-bar"></div>
                         <div className="profile-advert-container">
-                            <MiniAdvert image={LogoBlue} title="Математика" rating={0} price={100} location={"Львів"} type={false} description={"Дуже чудове репетиторство"} category={"Математика"} showHeart={true}/>
-                            <MiniAdvert image={LogoBlue} title="Математика" rating={0} price={100} location={"Львів"} type={false} description={"Дуже чудове репетиторство"} category={"Математика"} showHeart={true}/>
-                            <MiniAdvert image={LogoBlue} title="Математика" rating={0} price={100} location={"Львів"} type={false} description={"Дуже чудове репетиторство"} category={"Математика"} showHeart={true}/>
-                            
+                            {viewHistoryData.map(dictionary => (
+                                <MiniAdvert advert_id={dictionary.ad.id} image={dictionary.ad.image} title={dictionary.ad.title} rating={dictionary.ad.average_rating ? dictionary.ad.average_rating : 0} price={dictionary.ad.price} location={dictionary.ad.location} type={dictionary.ad.type_of_lesson} description={dictionary.ad.description} category={dictionary.ad.category} showHeart={true}/>
+                            ))}
                         </div>
+                        {viewHistoryData.length === 0 ? <span className="no-adverts-message">Історія перегляду порожня</span> : <button className="btn clear-history-button" onClick={ClearViewHistory}>Очистити історію</button>}
                     </div>
                 </div>
             </div>

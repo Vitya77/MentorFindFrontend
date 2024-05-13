@@ -113,6 +113,30 @@ function AdvertPage() {
 
     useEffect(getReviews, [URlparam]);
 
+    const viewAdvert = () => {
+        fetch(`${serverURL}/viewhistory/`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Token ${localStorage.getItem('mentorFindToken')}`
+            },
+            body: JSON.stringify({
+                'advertisement': URlparam
+            })
+        })
+            .then(response => {
+                return response.json();
+            })
+            .then(data => {
+                console.log(data);
+            })
+            .catch(error => {
+                console.error('Error fetching data:', error);
+            });
+    }
+
+    useEffect(viewAdvert, [URlparam]);
+
     const [reviewData, setReviewData] = useState({
         rating: 0,
         text: "",
@@ -236,7 +260,7 @@ function AdvertPage() {
                     <div>
                         <div className="advert-information-child star" style={{'--rating': `${advertData.average_rating/5 * 100}%`}}>★★★★★</div>
                     </div>
-                    <AdvertSelect />
+                    <AdvertSelect advert_id={URlparam}/>
                     <div className="advert-information-child advert-category">
                         {advertData.category}
                     </div>
