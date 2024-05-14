@@ -53,9 +53,11 @@ function App() {
   }
 
   const [showAdvertCreated, setshowAdvertCreated] = useState(false);
+  const [createdOrEdited, setСreatedOrEdited] = useState("");
 
-  const handleShowAdvertCreated = () => {
+  const handleShowAdvertCreated = (message) => {
     setshowAdvertCreated(true);
+    setСreatedOrEdited(message);
     setTimeout(function() {
       setshowAdvertCreated(false);
     }, 3000);
@@ -73,7 +75,7 @@ function App() {
         <Modal.Header closeButton>
           <Modal.Title style={{display: 'flex', 'alignItems': 'center'}}>
             <svg className="checkmark" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 52 52"><circle className="checkmark__circle" cx="26" cy="26" r="25" fill="none" /><path className="checkmark__check" fill="none" d="M14.1 27.2l7.1 7.2 16.7-16.8" /></svg>
-            <span style={{'fontSize': '1.2rem', 'marginLeft': '10px'}}>Ви успішно створили оголошення!</span>
+            <span style={{'fontSize': '1.2rem', 'marginLeft': '10px'}}>{createdOrEdited}</span>
           </Modal.Title>
         </Modal.Header>
       </Modal>

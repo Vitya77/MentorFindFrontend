@@ -31,7 +31,6 @@ function ProfilePage() {
               return response.json();
           })
           .then(data => { 
-              console.log(data);
               setSelectedAdvertsData(data);
           })
           .catch((error) => {
@@ -59,7 +58,6 @@ function ProfilePage() {
               return response.json();
           })
           .then(data => { 
-              console.log(data);
               setViewHistoryData(data);
           })
           .catch((error) => {
@@ -90,6 +88,31 @@ function ProfilePage() {
               console.error('Error:', error);
           });
     }
+
+    const [createdAdvertsData, setCreatedAdvertsData] = useState([]);
+
+    const GetCreatedAdverts = () => {
+        fetch(`${serverURL}/advert/get-for-author/`, { //Sending a request
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Token ${localStorage.getItem('mentorFindToken')}`
+            }
+          })
+          .then(response => {
+              return response.json();
+          })
+          .then(data => { 
+              setCreatedAdvertsData(data);
+          })
+          .catch((error) => {
+              console.error('Error:', error);
+          });
+    }
+
+    useEffect(() => {
+        GetCreatedAdverts();
+      }, []);
 
     return (
         <div className="profile-page-container">
@@ -156,10 +179,10 @@ function ProfilePage() {
                         <h1 className="profile-category-title">Створені оголошення</h1>
                         <div className="profile-bar"></div>
                         <div className="profile-advert-container">
-                            <MiniAdvert image={LogoBlue} title="Математика" rating={0} price={100} location={"Львів"} type={false} description={"Дуже чудове репетиторство"} category={"Математика"} showEdit={true}/>
-                            <MiniAdvert image={LogoBlue} title="Математика" rating={0} price={100} location={"Львів"} type={false} description={"Дуже чудове репетиторство"} category={"Математика"} showEdit={true}/>
-                            <MiniAdvert image={LogoBlue} title="Математика" rating={0} price={100} location={"Львів"} type={false} description={"Дуже чудове репетиторство"} category={"Математика"} showEdit={true}/>
-                            
+                            {createdAdvertsData.map(dictionary => (
+                                <MiniAdvert advert_id={dictionary.id} image={dictionary.image} title={dictionary.title} rating={dictionary.average_rating ? dictionary.average_rating : 0} price={dictionary.price} location={dictionary.location} type={dictionary.type_of_lesson} description={dictionary.description} category={dictionary.category} showEdit={true}/>
+                            ))}
+                            {createdAdvertsData.length === 0 && <span className="no-adverts-message">Ви ще не створили жодного оголошення</span>}
                         </div>
                     </div>
                     <div className="profile-category" id="profile-selected-advert">

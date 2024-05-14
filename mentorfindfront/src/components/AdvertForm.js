@@ -47,6 +47,11 @@ const AdvertForm = ({NotAuthClick, onCreating, editingMode}) => {
             ['type']: e.target.innerText
         });
 
+        setChangedData({
+            ...changedData,
+            ['type']: true
+        });
+
         validateField('type', e.target.innerText);
     };
 
@@ -65,6 +70,11 @@ const AdvertForm = ({NotAuthClick, onCreating, editingMode}) => {
             ['image']: event.target.files[0]
         });
 
+        setChangedData({
+            ...changedData,
+            ['image']: true
+        });
+
         validateField('image', event.target.files[0]);
     };
 
@@ -73,6 +83,11 @@ const AdvertForm = ({NotAuthClick, onCreating, editingMode}) => {
         setFormData({
             ...formData,
             ['image']: e.dataTransfer.files[0]
+        });
+
+        setChangedData({
+            ...changedData,
+            ['image']: true
         });
 
         validateField('image', e.dataTransfer.files[0]);
@@ -99,6 +114,16 @@ const AdvertForm = ({NotAuthClick, onCreating, editingMode}) => {
         image: null
     });
 
+    const [changedData, setChangedData] = useState({
+        title: false,
+        category: false,
+        location: false,
+        price: false,
+        description: false,
+        type: false,
+        image: false
+    });
+
     const [isCreated, setIsCreated] = useState(false);
 
     const handleDataChange = (event) => {
@@ -116,8 +141,15 @@ const AdvertForm = ({NotAuthClick, onCreating, editingMode}) => {
             [name]: value
         });
 
+        setChangedData({
+            ...changedData,
+            [name]: true
+        });
+
         validateField(name, value);
     };
+
+    const [isEdited, setIsEdited] = useState(false);
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -130,27 +162,31 @@ const AdvertForm = ({NotAuthClick, onCreating, editingMode}) => {
             }
 
             const dataToSend = new FormData();
-            dataToSend.append("title", formData.title);
-            dataToSend.append("category", formData.category);
-            dataToSend.append("price", parseFloat(formData.price).toFixed(2));
-            dataToSend.append("description", formData.description);
-            dataToSend.append("image", formData.image);
-            dataToSend.append("author", 1);
-            dataToSend.append("location", formData.location);
+            changedData.title && dataToSend.append("title", formData.title);
+            changedData.category && dataToSend.append("category", formData.category);
+            changedData.price && dataToSend.append("price", parseFloat(formData.price).toFixed(2));
+            changedData.description && dataToSend.append("description", formData.description);
+            changedData.image && dataToSend.append("image", formData.image);
+            changedData.location && dataToSend.append("location", formData.location);
             if (type_of_lesson !== null) {
-                dataToSend.append("type_of_lesson", type_of_lesson)
+                changedData.type && dataToSend.append("type_of_lesson", type_of_lesson)
             }
 
-            await fetch(`${serverURL}/advert/adding-and-searching/`, { 
-                method: 'POST',
+            await fetch(editingMode ? `${serverURL}/advert/edit/${IdOfAdvert}/` : `${serverURL}/advert/adding-and-searching/`, { 
+                method: editingMode ? 'PATCH' : 'POST',
                 body: dataToSend,
                 headers: {
                     'Authorization': `Token ${localStorage.getItem('mentorFindToken')}`
                 }
             })
                 .then(response => {
-                    if (response.status === 201) {
-                        onCreating();
+                    if (editingMode && response.status === 200) {
+                        onCreating("Ви успішно відредагували оголошення!");
+                        NotAuthClick();
+                        setIsEdited(true);
+                    }
+                    if (!editingMode && response.status === 201) {
+                        onCreating("Ви успішно створили оголошення!");
                         NotAuthClick();
                         setIsCreated(true);
                     }
@@ -205,6 +241,10 @@ const AdvertForm = ({NotAuthClick, onCreating, editingMode}) => {
                 setFormData({
                     ...formData,
                     ['description']: data.content
+                });
+                setChangedData({
+                    ...changedData,
+                    ['description']: true
                 });
             })
             .catch((error) => {
@@ -286,14 +326,69 @@ const AdvertForm = ({NotAuthClick, onCreating, editingMode}) => {
             ...formData,
             ['image']: generatedImages[e.target.id]
         });
+
+        setChangedData({
+            ...changedData,
+            ['image']: true
+        });
     }
 
     const hideChoosingImage = () => {
         setGeneratedImages([]);
     }
 
+    const [IdOfAdvert] = useState(window.location.pathname.replace("advertform/edit/", "").replace("/", ""));
+
+    const GetAdvertisementData = () => {
+        if (editingMode) {
+            fetch(`${serverURL}/advert/get/${IdOfAdvert}`, { 
+                method: 'GET',
+                headers: {
+                    'Authorization': `Token ${localStorage.getItem('mentorFindToken')}`
+                }
+            })
+            .then(response => {
+                if (response.status === 200) {
+                    return response.json()
+                }
+            })
+            .then(data => {
+                console.log(data);
+                setFormData({
+                    ...formData,
+                    ['title']: data.title,
+                    ['image']: data.image,
+                    ['description']: data.description,
+                    ['category']: data.category,
+                    ['price']: data.price,
+                    ['location']: data.location,
+                    ['type']: data.type_of_lesson !== "none" ? (data.type_of_lesson ? "Онлайн" : "Офлайн") : "Змішане"
+                });
+            })
+            .catch((error) => {
+                console.error('Error:', error);
+            });
+        }
+        else {
+            setFormData({
+                title: '',
+                category: '',
+                location: '',
+                price: '',
+                description: '',
+                type: 'Тип навчання',
+                image: null
+            });
+        }
+    }
+
+    useEffect(GetAdvertisementData, [IdOfAdvert, editingMode]);
+
     if (isCreated) { 
         return <Navigate replace to="/" />;
+    }
+    if (isEdited) { 
+        return <Navigate replace to="/profile" />;
     }
     return (
         <div className="advert-form-container">
