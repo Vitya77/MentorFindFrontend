@@ -191,7 +191,7 @@ function ProfilePage() {
                         <div className="profile-bar"></div>
                         <div className="profile-advert-container">
                             {selectedAdvertsData.map(dictionary => (
-                                <MiniAdvert refreshing={refreshSelected} setRefreshing={setRefreshSelected} advert_id={dictionary.id} image={dictionary.image} title={dictionary.title} rating={dictionary.average_rating ? dictionary.average_rating : 0} price={dictionary.price} location={dictionary.location} type={dictionary.type_of_lesson} description={dictionary.description} category={dictionary.category} showHeart={true}/>
+                                <MiniAdvert refreshing={refreshSelected} setRefreshing={setRefreshSelected} advert_id={dictionary.id} image={dictionary.image} title={dictionary.title} rating={dictionary.average_rating ? dictionary.average_rating : 0} price={dictionary.price} location={dictionary.location} type={dictionary.type_of_lesson} description={dictionary.description} category={dictionary.category} showHeart={true} isSelected={true}/>
                             ))}
                             {selectedAdvertsData.length === 0 && <span className="no-adverts-message">Немає вибраних оголошень</span>}
                         </div>
@@ -202,7 +202,7 @@ function ProfilePage() {
                         <div className="profile-bar"></div>
                         <div className="profile-advert-container">
                             {viewHistoryData.map(dictionary => (
-                                <MiniAdvert advert_id={dictionary.advertisement.id} image={dictionary.advertisement.image} title={dictionary.advertisement.title} rating={dictionary.advertisement.average_rating ? dictionary.advertisement.average_rating : 0} price={dictionary.advertisement.price} location={dictionary.advertisement.location} type={dictionary.advertisement.type_of_lesson} description={dictionary.advertisement.description} category={dictionary.advertisement.category} showHeart={true}/>
+                                <MiniAdvert advert_id={dictionary.advertisement.id} image={dictionary.advertisement.image} title={dictionary.advertisement.title} rating={dictionary.advertisement.average_rating ? dictionary.advertisement.average_rating : 0} price={dictionary.advertisement.price} location={dictionary.advertisement.location} type={dictionary.advertisement.type_of_lesson} description={dictionary.advertisement.description} category={dictionary.advertisement.category} showHeart={true} isSelected={dictionary.advertisement.is_saved}/>
                             ))}
                         </div>
                         {viewHistoryData.length === 0 ? <span className="no-adverts-message">Історія перегляду порожня</span> : <button className="btn clear-history-button" onClick={ClearViewHistory}>Очистити історію</button>}

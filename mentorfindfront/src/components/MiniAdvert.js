@@ -2,7 +2,7 @@ import React, {useState} from 'react';
 import { Link, Navigate } from 'react-router-dom';
 import AdvertSelect from './AdvertSelect';
 
-function MiniAdvert({refreshing, setRefreshing, advert_id, title, image, rating, price, location, type, description, category, showHeart, showEdit}) {
+function MiniAdvert({refreshing, setRefreshing, advert_id, title, image, rating, price, location, type, description, category, showHeart, showEdit, isSelected}) {
 
     function whatType(type) {
         if (type === null) {
@@ -32,7 +32,7 @@ function MiniAdvert({refreshing, setRefreshing, advert_id, title, image, rating,
             <div className="mini-rating">
                 <div className="star" style={{'--rating': `${rating/5 * 100}%`}}>★★★★★</div>
             </div>
-            {showHeart && <AdvertSelect refreshing={refreshing} setRefreshing={setRefreshing} advert_id={advert_id}/>}
+            {showHeart && <AdvertSelect refreshing={refreshing} setRefreshing={setRefreshing} advert_id={advert_id} is_selected={isSelected}/>}
             {showEdit && <i className="fa-solid fa-pencil" onClick={LinkToEdit}/>}
             <div className="mini-category">${price}</div>
             <div className="mini-category">{location}</div>

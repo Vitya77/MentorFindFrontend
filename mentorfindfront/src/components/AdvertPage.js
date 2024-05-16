@@ -29,7 +29,8 @@ function AdvertPage() {
         location: "",
         price: "",
         title: "",
-        type_of_lesson: null
+        type_of_lesson: null,
+        is_saved: null
     });
 
     const [authorData, setAuthorData] = useState({
@@ -81,7 +82,6 @@ function AdvertPage() {
             .then(data => {
                 if (data.id && data.email && data.username) {
                     setAuthorData(data);
-                    console.log(data);
                 }
             })
             .catch(error => {
@@ -239,7 +239,7 @@ function AdvertPage() {
             <div className="advert-left-side-container">
                 <div className="advert-left-side">
                     <div className="advert-image">
-                        <img src={authorData.photo} alt="Advertisement"/>
+                        <img src={authorData.photo} alt="Author"/>
                     </div>
                     <a href="#advert-information" className="advert-link">Загальна інформація</a>
                     <a href="#advert-about" className="advert-link">Про себе</a>
@@ -262,7 +262,7 @@ function AdvertPage() {
                     <div>
                         <div className="advert-information-child star" style={{'--rating': `${advertData.average_rating/5 * 100}%`}}>★★★★★</div>
                     </div>
-                    <AdvertSelect advert_id={URlparam}/>
+                    {advertData.is_saved !== null && <AdvertSelect advert_id={URlparam} is_selected={advertData.is_saved}/>}
                     <div className="advert-information-child advert-category">
                         {advertData.category}
                     </div>
@@ -279,8 +279,8 @@ function AdvertPage() {
                 <div id="advert-about" className="advert-about">
                     <h2>Про себе</h2>
                     <div className="advert-description">
-                        <img src={advertData.image}/>
                         {advertData.description}
+                        <img src={advertData.image}/>
                     </div>
                 </div>
                 <div id="advert-reviews" className="advert-reviews" ref={reviewsContainerRef}>

@@ -3,9 +3,9 @@ import config from '../config';
 
 const serverURL = config.serverURL;
 
-function AdvertSelect({refreshing, setRefreshing, advert_id}) {
+function AdvertSelect({refreshing, setRefreshing, advert_id, is_selected}) {
 
-    const [isSelected, setIsSelected] = useState(false);
+    const [isSelected, setIsSelected] = useState(is_selected);
 
     const Select = (e) => {
         e.preventDefault();
@@ -53,7 +53,8 @@ function AdvertSelect({refreshing, setRefreshing, advert_id}) {
               console.error('Error:', error);
           });
 
-        setRefreshing((refreshing + 1) % 2);
+        try {setRefreshing((refreshing + 1) % 2);}
+        catch {}
     }
 
     return (
