@@ -185,10 +185,16 @@ const AdvertForm = ({NotAuthClick, onCreating, editingMode}) => {
                         NotAuthClick();
                         setIsEdited(true);
                     }
-                    if (!editingMode && response.status === 201) {
+                    else if (!editingMode && response.status === 201) {
                         onCreating("Ви успішно створили оголошення!");
                         NotAuthClick();
                         setIsCreated(true);
+                    }
+                    else if (response.status === 403) {
+                        setErrors({
+                            ...errors,
+                            ['request']: "Ви не можете редагувати це оголошення"
+                        });
                     }
                 })
                 .catch((error) => {
@@ -462,6 +468,7 @@ const AdvertForm = ({NotAuthClick, onCreating, editingMode}) => {
                 </div>
                 <button className="input-button" id="advert-create-btn" onClick={handleSubmit}>
                     {`${editingMode ? "Редагувати" : "Створити"} оголошенння`}
+                    {errors.request && <span className="error-span">{errors.request}</span>}
                 </button>
             </div>
         </div>

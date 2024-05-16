@@ -47,7 +47,7 @@ function ProfilePage() {
     const [viewHistoryData, setViewHistoryData] = useState([]);
 
     const GetViewHistory = () => {
-        fetch(`${serverURL}/viewhistory/`, { //Sending a request
+        fetch(`${serverURL}/viewhistory/getlist`, { //Sending a request
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
@@ -202,7 +202,7 @@ function ProfilePage() {
                         <div className="profile-bar"></div>
                         <div className="profile-advert-container">
                             {viewHistoryData.map(dictionary => (
-                                <MiniAdvert advert_id={dictionary.ad.id} image={dictionary.ad.image} title={dictionary.ad.title} rating={dictionary.ad.average_rating ? dictionary.ad.average_rating : 0} price={dictionary.ad.price} location={dictionary.ad.location} type={dictionary.ad.type_of_lesson} description={dictionary.ad.description} category={dictionary.ad.category} showHeart={true}/>
+                                <MiniAdvert advert_id={dictionary.advertisement.id} image={dictionary.advertisement.image} title={dictionary.advertisement.title} rating={dictionary.advertisement.average_rating ? dictionary.advertisement.average_rating : 0} price={dictionary.advertisement.price} location={dictionary.advertisement.location} type={dictionary.advertisement.type_of_lesson} description={dictionary.advertisement.description} category={dictionary.advertisement.category} showHeart={true}/>
                             ))}
                         </div>
                         {viewHistoryData.length === 0 ? <span className="no-adverts-message">Історія перегляду порожня</span> : <button className="btn clear-history-button" onClick={ClearViewHistory}>Очистити історію</button>}

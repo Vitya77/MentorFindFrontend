@@ -35,7 +35,8 @@ function AdvertPage() {
     const [authorData, setAuthorData] = useState({
         id: 0,
         email: "",
-        username: ""
+        username: "",
+        photo: null
     });
 
     const getAdvertData = () => {
@@ -80,6 +81,7 @@ function AdvertPage() {
             .then(data => {
                 if (data.id && data.email && data.username) {
                     setAuthorData(data);
+                    console.log(data);
                 }
             })
             .catch(error => {
@@ -237,7 +239,7 @@ function AdvertPage() {
             <div className="advert-left-side-container">
                 <div className="advert-left-side">
                     <div className="advert-image">
-                        <img src={advertData.image} alt="Advertisement"/>
+                        <img src={authorData.photo} alt="Advertisement"/>
                     </div>
                     <a href="#advert-information" className="advert-link">Загальна інформація</a>
                     <a href="#advert-about" className="advert-link">Про себе</a>
@@ -277,6 +279,7 @@ function AdvertPage() {
                 <div id="advert-about" className="advert-about">
                     <h2>Про себе</h2>
                     <div className="advert-description">
+                        <img src={advertData.image}/>
                         {advertData.description}
                     </div>
                 </div>

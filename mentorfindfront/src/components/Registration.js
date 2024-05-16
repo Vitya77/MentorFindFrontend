@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 import { Navigate } from 'react-router-dom';
 import * as Yup from 'yup';
 import config from '../config'
+import WomenAvatar from '../img/women-avatar.webp'
+import MenAvatar from '../img/men-avatar.webp'
 
 const serverURL = config.serverURL; // Constant to save server url
 
@@ -28,6 +30,7 @@ const RegistrationForm = ({NotAuthClick, changeSuccessAuth}) => {
     const [formData, setFormData] = useState({ // State too save user input
         username: '',
         email: '',
+        image: null,
         password: '',
         confirmPassword: ''
     });
@@ -64,19 +67,26 @@ const RegistrationForm = ({NotAuthClick, changeSuccessAuth}) => {
                 return;
             }
 
-            const dataToSend = JSON.stringify( // Formation of what data to send to the server
-                {
-                    "username": formData.username,
-                    "email": formData.email,
-                    "password": formData.password
-                }
-            );
+            // const dataToSend = JSON.stringify( // Formation of what data to send to the server
+            //     {
+            //         "username": formData.username,
+            //         "email": formData.email,
+            //         "password": formData.password,
+            //         "photo": formData.image
+            //     }
+            // );
+
+            const dataToSend = new FormData();
+            dataToSend.append("username", formData.username);
+            dataToSend.append("email", formData.email);
+            dataToSend.append("password", formData.password);
+            formData.image !== null && dataToSend.append("photo", formData.image);
 
             await fetch(`${serverURL}/users/register/`, { //Sending a request
                 method: 'POST',
                 body: dataToSend,
                 headers: {
-                    'Content-Type': 'application/json'
+                    
                 }
             })
                 .then(response => {
@@ -105,12 +115,76 @@ const RegistrationForm = ({NotAuthClick, changeSuccessAuth}) => {
         }
     };
 
+    const [isAvatarHovered, setIsAvatarHovered] = useState(false);
+
+    const AvatarHover = () => {
+        setIsAvatarHovered(true);
+    }
+
+    const AvatarUnhover = () => {
+        setIsAvatarHovered(false);
+    }
+
+    const handleAvatarChange = (event) => {
+        setFormData({
+            ...formData,
+            ['image']: event.target.files[0]
+        });
+        setIsWomenSelected(false);
+        setIsMenSelected(false);
+        console.log(event.target.files[0]);
+    };
+
+    const [isWomenSelected, setIsWomenSelected] = useState(false);
+    const [isMenSelected, setIsMenSelected] = useState(false);
+
+    const handleStandartAvatarChange = (event) => {
+        const src = event.target.src;
+        if (src.includes('women-avatar')) {
+            setIsWomenSelected(true);
+            setIsMenSelected(false);
+        }
+        else if (src.includes('men-avatar')) {
+            setIsMenSelected(true);
+            setIsWomenSelected(false);
+        }
+        fetch(src)
+            .then(response => response.blob())
+            .then(blob => {
+                const file = new File([blob], "standart_avatar.jpg", { type: blob.type });
+                console.log(file);
+                setFormData({
+                    ...formData,
+                    ['image']: file
+                });
+            })
+            .catch(error => console.error('Error fetching image file:', error));
+    };
+
     if (localStorage.getItem('mentorFindToken') !== null && localStorage.getItem('mentorFindToken') !== "") { // If user is authenticated navigate to main page
         return <Navigate replace to="/" />;
     }
     return ( // If not, render the registration form
         <form onSubmit={handleSubmit} method="post" className="sign-up-form">
-            <h2 className="title">Sign up</h2>
+            <div className="avatar-input" onMouseEnter={AvatarHover} onMouseLeave={AvatarUnhover}>
+                <div className={`standart-avatar women-avatar ${isWomenSelected && "selected"}`}>
+                    <img src={WomenAvatar} onClick={handleStandartAvatarChange}/>
+                </div>
+                <div className="avatar-container">
+                    <label className="avatar-upload">
+                        {formData.image && formData.image.name !== "standart_avatar.jpg" ? <img src={URL.createObjectURL(formData.image)} /> : (isAvatarHovered ? <i className="fa-solid fa-file-import"/> : <i className="fa-solid fa-camera"/>)}
+                        <input
+                            type="file"
+                            accept="image/*"
+                            className="image-input"
+                            onChange={handleAvatarChange}
+                        />
+                    </label> 
+                </div>
+                <div className={`standart-avatar men-avatar ${isMenSelected && "selected"}`} >
+                    <img src={MenAvatar} onClick={handleStandartAvatarChange}/>
+                </div>
+            </div>
             <div className="input-field">
                 <i className="fas fa-user" />
                 <input 
