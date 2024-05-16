@@ -156,10 +156,6 @@ const AdvertForm = ({NotAuthClick, onCreating, editingMode}) => {
 
         try {
             await validationSchema.validate(formData, { abortEarly: false });
-            var type_of_lesson = null;
-            if (formData.type !== "Змішане") {
-                type_of_lesson = formData.type === "Онлайн" ? true : false; 
-            }
 
             const dataToSend = new FormData();
             changedData.title && dataToSend.append("title", formData.title);
@@ -168,9 +164,7 @@ const AdvertForm = ({NotAuthClick, onCreating, editingMode}) => {
             changedData.description && dataToSend.append("description", formData.description);
             changedData.image && dataToSend.append("image", formData.image);
             changedData.location && dataToSend.append("location", formData.location);
-            if (type_of_lesson !== null) {
-                changedData.type && dataToSend.append("type_of_lesson", type_of_lesson)
-            }
+            changedData.type && dataToSend.append("type_of_lesson", formData.type);
 
             await fetch(editingMode ? `${serverURL}/advert/edit/${IdOfAdvert}/` : `${serverURL}/advert/adding-and-searching/`, { 
                 method: editingMode ? 'PATCH' : 'POST',

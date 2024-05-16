@@ -29,7 +29,7 @@ function AdvertPage() {
         location: "",
         price: "",
         title: "",
-        type_of_lesson: null,
+        type_of_lesson: "",
         is_saved: null
     });
 
@@ -267,7 +267,7 @@ function AdvertPage() {
                         {advertData.category}
                     </div>
                     <div className="advert-information-child advert-category">
-                        {(advertData.type_of_lesson !== null) ? (advertData.type_of_lesson ? "Онлайн" : "Офлайн") : "Онлайн/Офлайн"}
+                        {advertData.type_of_lesson}
                     </div>
                     <div className="advert-information-child advert-category">
                         {advertData.location}

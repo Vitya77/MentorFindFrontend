@@ -4,18 +4,6 @@ import AdvertSelect from './AdvertSelect';
 
 function MiniAdvert({refreshing, setRefreshing, advert_id, title, image, rating, price, location, type, description, category, showHeart, showEdit, isSelected}) {
 
-    function whatType(type) {
-        if (type === null) {
-            return "Онлайн/Офлайн";
-        }
-        else if (type === true) {
-            return "Онлайн";
-        }
-        else if (type === false) {
-            return "Офлайн";
-        }
-    }
-
     const [isEdit, setIsEdit] = useState(false);
 
     const LinkToEdit = (e) => {
@@ -36,7 +24,7 @@ function MiniAdvert({refreshing, setRefreshing, advert_id, title, image, rating,
             {showEdit && <i className="fa-solid fa-pencil" onClick={LinkToEdit}/>}
             <div className="mini-category">${price}</div>
             <div className="mini-category">{location}</div>
-            <div className="mini-category">{whatType(type)}</div>
+            <div className="mini-category">{type}</div>
             <div className="mini-category">{category}</div>
             <div className="mini-description">{description}</div>
         </Link>
