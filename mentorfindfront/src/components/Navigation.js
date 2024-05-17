@@ -42,11 +42,11 @@ const Navigation = ({signUpMode, navClasses, Logo, AuthClick, NotAuthClick}) => 
               &nbsp; Головна
             </Link>
           </li>
-          <li className="nav-list-item">
+          {localStorage.getItem('mentorFindToken') !== null && <li className="nav-list-item">
             <Link to="/advertform" className="nav-link" onClick={AuthClick}>
               Додати оголошення
             </Link>
-          </li>
+          </li>}
           {localStorage.getItem('mentorFindToken') === null ? (
           <li className="nav-list-item">
             <Link to="/auth" className="nav-link" onClick={AuthClick}>

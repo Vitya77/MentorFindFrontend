@@ -83,10 +83,10 @@ function App() {
         <Route path="/" element={<MainPage />} />
         <Route path="/auth" element={<Auth signUpModeFunc={changeSignUpMode} NotAuthClick={NotAuthClick} changeSuccessAuth={changeSuccessAuth}/>} />
         <Route path="/search" element={<SearchPage />} />
-        <Route path="/advert/*" element={<AdvertPage />} />
+        <Route path="/advert/*" element={<AdvertPage AuthClick={AuthClick}/>} />
         <Route path="/advertform" element={<AdvertForm onCreating={handleShowAdvertCreated} NotAuthClick={NotAuthClick} editingMode={false}/>} />
         <Route path="/advertform/edit/*" element={<AdvertForm onCreating={handleShowAdvertCreated} NotAuthClick={NotAuthClick} editingMode={true}/>} />
-        <Route path="/profile" element={<ProfilePage />} />
+        <Route path="/profile" element={<ProfilePage onCreating={handleShowAdvertCreated}/>} />
         <Route path="*" element={<NotFound />} />
       </Routes>
       {SuccessAuth && <AuthSuccMessage/>}

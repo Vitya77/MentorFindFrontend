@@ -20,10 +20,9 @@ function Search() {
     const handleSearch = () => {
       fetch(`${serverURL}/advert/adding-and-searching/?t=${searchText}&c=${searchText}&l=${searchText}&d=${searchText}`, { //Sending a request
         method: 'GET',
-        headers: {
-            'Content-Type': 'application/json',
-            'Authorization': `Token ${localStorage.getItem('mentorFindToken')}`
-        }
+        headers: 
+            localStorage.getItem('mentorFindToken') !== null ? {'Authorization': `Token ${localStorage.getItem('mentorFindToken')}`} : {}
+        
       })
       .then(response => {
           return response.json();
@@ -65,7 +64,7 @@ function Search() {
     <div className="search-content">
         {/* Картінка, ім'я автора, ціна, локація, тип уроку, рейтинг */}
         {data.map(dictionary => (
-          <MiniAdvert advert_id={dictionary.id} image={dictionary.image} title={dictionary.title} rating={dictionary.average_rating ? dictionary.average_rating : 0} price={dictionary.price} location={dictionary.location} type={dictionary.type_of_lesson} description={dictionary.description} category={dictionary.category} showHeart={true} isSelected={dictionary.is_saved}/>
+          <MiniAdvert advert_id={dictionary.id} image={dictionary.image} title={dictionary.title} rating={dictionary.average_rating ? dictionary.average_rating : 0} price={dictionary.price} location={dictionary.location} type={dictionary.type_of_lesson} description={dictionary.description} category={dictionary.category} showHeart={localStorage.getItem('mentorFindToken') !== null ? true : false} isSelected={dictionary.is_saved}/>
         ))}
     </div>
     </>

@@ -1185,6 +1185,32 @@ hr {
   margin: 20px;
 }
 
+.advert-information.not-authenticated {
+  grid-template-columns: 1fr 1fr;
+}
+
+.not-authenticated-review {
+  color: #444;
+  font-weight: 500;
+  font-size: 20px;
+  align-self: center;
+  margin: 5px 0;
+  cursor: pointer;
+}
+
+.not-authenticated-review > span {
+  font-weight: 700;
+  color: #1f6aec;
+}
+
+.not-authenticated-review > i {
+  transition: .5s;
+}
+
+.not-authenticated-review:hover > i {
+  margin-left: 20px;
+}
+
 .advert-information > i {
   grid-row: span 3;
   font-size: 25px;
@@ -1842,6 +1868,7 @@ input[type="file"] {
 .profile-user {
   margin-left: 30px;
   height: 100%;
+  width: 210px;
   padding-top: 20px;
 }
 
@@ -1850,12 +1877,16 @@ input[type="file"] {
   font-weight: 700;
 }
 
+.profile-username.edit {
+  height: 60%;
+}
+
 .profile-info input {
   font-size: 20px;
   border: none;
   outline: none;
   border-bottom: 2px solid black;
-  margin-bottom: 20px;
+  
   width: 100%;
 }
 
@@ -1865,6 +1896,7 @@ input[type="file"] {
 
 .profile-email {
   font-size: 20px;
+  height: 40%;
 }
 
 .profile-email > input {
@@ -1883,6 +1915,14 @@ input[type="file"] {
   align-self: flex-end;
   display: block;
   position: relative;
+}
+
+.profile-user-editing-off {
+  display: block;
+  border: none;
+  background-color: white;
+  align-self: flex-start;
+  font-size: 20px;
 }
 
 .profile-user-edit {

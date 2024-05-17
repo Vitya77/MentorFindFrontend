@@ -67,15 +67,6 @@ const RegistrationForm = ({NotAuthClick, changeSuccessAuth}) => {
                 return;
             }
 
-            // const dataToSend = JSON.stringify( // Formation of what data to send to the server
-            //     {
-            //         "username": formData.username,
-            //         "email": formData.email,
-            //         "password": formData.password,
-            //         "photo": formData.image
-            //     }
-            // );
-
             const dataToSend = new FormData();
             dataToSend.append("username", formData.username);
             dataToSend.append("email", formData.email);
@@ -152,7 +143,6 @@ const RegistrationForm = ({NotAuthClick, changeSuccessAuth}) => {
             .then(response => response.blob())
             .then(blob => {
                 const file = new File([blob], "standart_avatar.jpg", { type: blob.type });
-                console.log(file);
                 setFormData({
                     ...formData,
                     ['image']: file

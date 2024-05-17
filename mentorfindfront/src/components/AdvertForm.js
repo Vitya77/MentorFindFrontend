@@ -2,6 +2,7 @@ import React, {useState, useEffect} from 'react';
 import config from '../config'
 import * as Yup from 'yup';
 import { Navigate } from 'react-router-dom';
+import { CustomCreateURL } from '../useful';
 
 const serverURL = config.serverURL;
 
@@ -54,15 +55,6 @@ const AdvertForm = ({NotAuthClick, onCreating, editingMode}) => {
 
         validateField('type', e.target.innerText);
     };
-
-    function CustomCreateURL(url_or_file) {
-        try {
-            return URL.createObjectURL(url_or_file);
-        }
-        catch {
-            return url_or_file;
-        }
-    }
 
     const handleFileChange = (event) => {
         setFormData({
@@ -225,7 +217,7 @@ const AdvertForm = ({NotAuthClick, onCreating, editingMode}) => {
         });
         setIsDescrGenerating(true);
 
-        fetch(`${serverURL}/ai/getText/?c=Придумай опис до оголошення про репетиторство в населеному пункті ${formData.location} з заголовком ${formData.title} з категорії ${formData.category} і з типом навчання ${formData.type} та ціною ${formData.price}`, { 
+        fetch(`${serverURL}/ai/getText/?c=Придумай опис до оголошення про репетиторство в населеному пункті ${formData.location} з заголовком ${formData.title} з категорії ${formData.category} і з типом навчання ${formData.type} та ціною ${formData.price} українсько. мовою`, { 
             method: 'GET',
             headers: {
                 'Authorization': `Token ${localStorage.getItem('mentorFindToken')}`
