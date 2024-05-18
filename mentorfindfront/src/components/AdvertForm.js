@@ -345,7 +345,6 @@ const AdvertForm = ({NotAuthClick, onCreating, editingMode}) => {
                 }
             })
             .then(data => {
-                console.log(data);
                 setFormData({
                     ...formData,
                     ['title']: data.title,

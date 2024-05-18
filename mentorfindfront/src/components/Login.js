@@ -58,7 +58,6 @@ const LoginForm = ({NotAuthClick, changeSuccessAuth}) => {
                 }
             })
             .then(data => { 
-                console.log(data.token);
                 localStorage.setItem('mentorFindToken', data.token); // Setting a session token
                 changeSuccessAuth();
                 NotAuthClick(); // All needed events after authorization

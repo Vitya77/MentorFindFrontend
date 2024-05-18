@@ -253,7 +253,6 @@ function ProfilePage({onCreating}) {
                     }
                 })
                 .then(data => {
-                    console.log('Success:', data);
                     changeToNonEditUser();
                     GetUserData();
                     onCreating("Ви успішно відредагували профіль!");
@@ -262,8 +261,7 @@ function ProfilePage({onCreating}) {
                 .catch((error) => {
                     console.error('Error:', error);
                 });
-        } catch (error) {
-            console.log(error); // If validation is not correct change errors text
+        } catch (error) { // If validation is not correct change errors text
             const fieldErrors = {};
             error.inner.forEach(err => {
                 fieldErrors[err.path] = err.message;

@@ -89,7 +89,6 @@ const RegistrationForm = ({NotAuthClick, changeSuccessAuth}) => {
                     }
                 })
                 .then(data => {
-                    console.log('Success:', data);
                     localStorage.setItem('mentorFindToken', data.token); // Setting a session token
                     changeSuccessAuth();
                     NotAuthClick();// All needed events after authorization
@@ -123,7 +122,6 @@ const RegistrationForm = ({NotAuthClick, changeSuccessAuth}) => {
         });
         setIsWomenSelected(false);
         setIsMenSelected(false);
-        console.log(event.target.files[0]);
     };
 
     const [isWomenSelected, setIsWomenSelected] = useState(false);

@@ -95,7 +95,6 @@ function AdvertPage({AuthClick}) {
                 localStorage.getItem('mentorFindToken') !== null ? {'Authorization': `Token ${localStorage.getItem('mentorFindToken')}`} : {}
         })
             .then(response => {
-                console.log(URlparam);
                 if (response.status === 404) {
                     return;
                 }
@@ -127,7 +126,7 @@ function AdvertPage({AuthClick}) {
                 return response.json();
             })
             .then(data => {
-                console.log(data);
+
             })
             .catch(error => {
                 console.error('Error fetching data:', error);
@@ -204,7 +203,6 @@ function AdvertPage({AuthClick}) {
                 return response.json();
             })
             .then(data => {
-                console.log(data);
             })
             .catch(error => {
                 console.error('Error fetching data:', error);

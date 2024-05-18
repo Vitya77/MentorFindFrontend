@@ -25,7 +25,7 @@ function AdvertSelect({refreshing, setRefreshing, advert_id, is_selected}) {
               return response.json();
           })
           .then(data => { 
-              console.log(data);
+
           })
           .catch((error) => {
               console.error('Error:', error);
@@ -47,7 +47,7 @@ function AdvertSelect({refreshing, setRefreshing, advert_id, is_selected}) {
               return response.json();
           })
           .then(data => { 
-              console.log(data);
+
           })
           .catch((error) => {
               console.error('Error:', error);
