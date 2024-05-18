@@ -3,6 +3,8 @@ import config from '../config';
 import Review from './Review';
 import NotFound from './NotFoundPage';
 import * as Yup from 'yup';
+import AdvertSelect from './AdvertSelect';
+import { Link } from 'react-router-dom';
 
 const serverURL = config.serverURL;
 
@@ -13,7 +15,7 @@ const validationSchema = Yup.object().shape({ // Validation schema of all inputs
         .required('*  Заповніть це поле'),
 });
 
-function AdvertPage() {
+function AdvertPage({AuthClick}) {
 
     const [notFound, setNotFound] = useState(false);
 
@@ -28,22 +30,22 @@ function AdvertPage() {
         location: "",
         price: "",
         title: "",
-        type_of_lesson: null
+        type_of_lesson: "",
+        is_saved: null
     });
 
     const [authorData, setAuthorData] = useState({
         id: 0,
         email: "",
-        username: ""
+        username: "",
+        photo: null
     });
 
     const getAdvertData = () => {
         fetch(`${serverURL}/advert/get/${URlparam}`, { //Sending a request
             method: 'GET',
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': `Token ${localStorage.getItem('mentorFindToken')}`
-            }
+            headers: 
+                localStorage.getItem('mentorFindToken') !== null ? {'Authorization': `Token ${localStorage.getItem('mentorFindToken')}`} : {}
         })
           .then(response => {
             if (response.status === 404) {
@@ -65,10 +67,8 @@ function AdvertPage() {
     useEffect(() => {
         fetch(`${serverURL}/users/get/${advertData.author}`, { //Sending a request
             method: 'GET',
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': `Token ${localStorage.getItem('mentorFindToken')}`
-            }
+            headers: 
+                localStorage.getItem('mentorFindToken') !== null ? {'Authorization': `Token ${localStorage.getItem('mentorFindToken')}`} : {}
         })
             .then(response => {
                 if (response.status === 404) {
@@ -89,12 +89,10 @@ function AdvertPage() {
     const [reviewsData, setReviewsData] = useState([]);
 
     const getReviews = () => {
-        fetch(`${serverURL}/advert/review-by-advertisement/${URlparam}/`, { //Sending a request
+        fetch(`${serverURL}/advert/review-by-advertisement/${URlparam}`, { //Sending a request
             method: 'GET',
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': `Token ${localStorage.getItem('mentorFindToken')}`
-            }
+            headers: 
+                localStorage.getItem('mentorFindToken') !== null ? {'Authorization': `Token ${localStorage.getItem('mentorFindToken')}`} : {}
         })
             .then(response => {
                 if (response.status === 404) {
@@ -111,6 +109,32 @@ function AdvertPage() {
     }
 
     useEffect(getReviews, [URlparam]);
+
+    const viewAdvert = () => {
+        if (localStorage.getItem('mentorFindToken') !== null) {
+        fetch(`${serverURL}/viewhistory/`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Token ${localStorage.getItem('mentorFindToken')}`
+            },
+            body: JSON.stringify({
+                'advertisement': URlparam
+            })
+        })
+            .then(response => {
+                return response.json();
+            })
+            .then(data => {
+
+            })
+            .catch(error => {
+                console.error('Error fetching data:', error);
+            });
+        }
+    }
+
+    useEffect(viewAdvert, [URlparam]);
 
     const [reviewData, setReviewData] = useState({
         rating: 0,
@@ -179,7 +203,6 @@ function AdvertPage() {
                 return response.json();
             })
             .then(data => {
-                console.log(data);
             })
             .catch(error => {
                 console.error('Error fetching data:', error);
@@ -212,7 +235,7 @@ function AdvertPage() {
             <div className="advert-left-side-container">
                 <div className="advert-left-side">
                     <div className="advert-image">
-                        <img src={advertData.image} alt="Advertisement"/>
+                        <img src={authorData.photo} alt="Author"/>
                     </div>
                     <a href="#advert-information" className="advert-link">Загальна інформація</a>
                     <a href="#advert-about" className="advert-link">Про себе</a>
@@ -228,18 +251,19 @@ function AdvertPage() {
                         {authorData.email}
                     </div>
                 </div>
-                <div id="advert-information" className="advert-information">
+                <div id="advert-information" className={`advert-information ${localStorage.getItem('mentorFindToken') === null && "not-authenticated"}`}>
                     <div className="advert-information-child advert-title">
                         {advertData.title}
                     </div>
                     <div>
                         <div className="advert-information-child star" style={{'--rating': `${advertData.average_rating/5 * 100}%`}}>★★★★★</div>
                     </div>
+                    {advertData.is_saved !== null && localStorage.getItem('mentorFindToken') !== null && <AdvertSelect advert_id={URlparam} is_selected={advertData.is_saved}/>}
                     <div className="advert-information-child advert-category">
                         {advertData.category}
                     </div>
                     <div className="advert-information-child advert-category">
-                        {(advertData.type_of_lesson !== null) ? (advertData.type_of_lesson ? "Онлайн" : "Офлайн") : "Онлайн/Офлайн"}
+                        {advertData.type_of_lesson}
                     </div>
                     <div className="advert-information-child advert-category">
                         {advertData.location}
@@ -252,6 +276,7 @@ function AdvertPage() {
                     <h2>Про себе</h2>
                     <div className="advert-description">
                         {advertData.description}
+                        <img src={advertData.image}/>
                     </div>
                 </div>
                 <div id="advert-reviews" className="advert-reviews" ref={reviewsContainerRef}>
@@ -278,7 +303,7 @@ function AdvertPage() {
                     {numberOfReviewsToShow < reviewsData.length && (
                         <button className="reviews-load" onClick={showMoreReviews}>Показати більше...</button>
                     )}
-                    <div className="review-form">
+                    {localStorage.getItem('mentorFindToken') !== null ? <div className="review-form">
                         <h4>Оцініть курс</h4>
                         <div className="stars">
                             {[1, 2, 3, 4, 5].map((star) => (
@@ -298,9 +323,11 @@ function AdvertPage() {
                         <span className="highlight"></span>
                         <span className="bar">{errors.text && <span className="error-span">{errors.text}</span>}</span>
                         <div className="send-review-button-container" onClick={sendReview}>
-                            <i className="fa-solid fa-paper-plane send-review-button"></i>
+                            <i className="fa-solid fa-paper-plane send-review-button"/>
                         </div>
-                    </div>
+                    </div> : <Link to="/auth" className="not-authenticated-review " onClick={AuthClick}>
+                            Щоб залишити відгук <span>увійдіть</span> в акаунт <i className="fa-solid fa-arrow-right"/>
+                        </Link>}
                 </div>
             </div>
         </div>

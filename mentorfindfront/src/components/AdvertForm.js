@@ -1,7 +1,8 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import config from '../config'
 import * as Yup from 'yup';
 import { Navigate } from 'react-router-dom';
+import { CustomCreateURL } from '../useful';
 
 const serverURL = config.serverURL;
 
@@ -27,7 +28,7 @@ const validationSchema = Yup.object().shape({ // Validation schema of all inputs
         .required('Обов\'язкове поле')
 });
 
-const AdvertForm = ({NotAuthClick, onCreating}) => {
+const AdvertForm = ({NotAuthClick, onCreating, editingMode}) => {
 
     const [isSelectOpen, setIsSelectOpen] = useState(false);
 
@@ -47,17 +48,23 @@ const AdvertForm = ({NotAuthClick, onCreating}) => {
             ['type']: e.target.innerText
         });
 
+        setChangedData({
+            ...changedData,
+            ['type']: true
+        });
+
         validateField('type', e.target.innerText);
     };
 
-    const [file, setFile] = useState(null);
-
     const handleFileChange = (event) => {
-        setFile(event.target.files[0]);
-
         setFormData({
             ...formData,
             ['image']: event.target.files[0]
+        });
+
+        setChangedData({
+            ...changedData,
+            ['image']: true
         });
 
         validateField('image', event.target.files[0]);
@@ -65,11 +72,14 @@ const AdvertForm = ({NotAuthClick, onCreating}) => {
 
     const handleDrop = (e) => {
         e.preventDefault();
-        setFile(e.dataTransfer.files[0]);
-
         setFormData({
             ...formData,
             ['image']: e.dataTransfer.files[0]
+        });
+
+        setChangedData({
+            ...changedData,
+            ['image']: true
         });
 
         validateField('image', e.dataTransfer.files[0]);
@@ -82,7 +92,7 @@ const AdvertForm = ({NotAuthClick, onCreating}) => {
             await Yup.reach(validationSchema, name).validate(value);
             setErrors({ ...errors, [name]: '' });
         } catch (error) {
-            setErrors({ ...errors, [name]: error.message });
+            await setErrors({ ...errors, [name]: error.message });
         }
     };
 
@@ -94,6 +104,16 @@ const AdvertForm = ({NotAuthClick, onCreating}) => {
         description: '',
         type: 'Тип навчання',
         image: null
+    });
+
+    const [changedData, setChangedData] = useState({
+        title: false,
+        category: false,
+        location: false,
+        price: false,
+        description: false,
+        type: false,
+        image: false
     });
 
     const [isCreated, setIsCreated] = useState(false);
@@ -113,43 +133,54 @@ const AdvertForm = ({NotAuthClick, onCreating}) => {
             [name]: value
         });
 
+        setChangedData({
+            ...changedData,
+            [name]: true
+        });
+
         validateField(name, value);
     };
+
+    const [isEdited, setIsEdited] = useState(false);
 
     const handleSubmit = async (e) => {
         e.preventDefault();
 
         try {
             await validationSchema.validate(formData, { abortEarly: false });
-            var type_of_lesson = null;
-            if (formData.type !== "Змішане") {
-                type_of_lesson = formData.type === "Онлайн" ? true : false; 
-            }
 
             const dataToSend = new FormData();
-            dataToSend.append("title", formData.title);
-            dataToSend.append("category", formData.category);
-            dataToSend.append("price", parseFloat(formData.price).toFixed(2));
-            dataToSend.append("description", formData.description);
-            dataToSend.append("image", file);
-            dataToSend.append("author", 1);
-            dataToSend.append("location", formData.location);
-            if (type_of_lesson !== null) {
-                dataToSend.append("type_of_lesson", type_of_lesson)
-            }
+            changedData.title && dataToSend.append("title", formData.title);
+            changedData.category && dataToSend.append("category", formData.category);
+            changedData.price && dataToSend.append("price", parseFloat(formData.price).toFixed(2));
+            changedData.description && dataToSend.append("description", formData.description);
+            changedData.image && dataToSend.append("image", formData.image);
+            changedData.location && dataToSend.append("location", formData.location);
+            changedData.type && dataToSend.append("type_of_lesson", formData.type);
 
-            await fetch(`${serverURL}/advert/adding-and-searching/`, { 
-                method: 'POST',
+            await fetch(editingMode ? `${serverURL}/advert/edit/${IdOfAdvert}/` : `${serverURL}/advert/adding-and-searching/`, { 
+                method: editingMode ? 'PATCH' : 'POST',
                 body: dataToSend,
                 headers: {
                     'Authorization': `Token ${localStorage.getItem('mentorFindToken')}`
                 }
             })
                 .then(response => {
-                    if (response.status === 201) {
-                        onCreating();
+                    if (editingMode && response.status === 200) {
+                        onCreating("Ви успішно відредагували оголошення!");
+                        NotAuthClick();
+                        setIsEdited(true);
+                    }
+                    else if (!editingMode && response.status === 201) {
+                        onCreating("Ви успішно створили оголошення!");
                         NotAuthClick();
                         setIsCreated(true);
+                    }
+                    else if (response.status === 403) {
+                        setErrors({
+                            ...errors,
+                            ['request']: "Ви не можете редагувати це оголошення"
+                        });
                     }
                 })
                 .catch((error) => {
@@ -164,13 +195,207 @@ const AdvertForm = ({NotAuthClick, onCreating}) => {
         }
     };
 
+    const [isDescrGenerating, setIsDescrGenerating] = useState(false);
+
+    const generateText = async () => {
+
+        if (formData.title === '' ?? formData.category === '' ?? formData.location === '' ?? formData.price < 1 ?? formData.type === 'Тип навчання') {
+            setErrors({
+                ...errors, 
+                ['title']: 'Вкажіть це поле',
+                ['location']: 'Вкажіть це поле',
+                ['category']: 'Вкажіть це поле',
+                ['price']: 'Вкажіть це поле',
+                ['type']: 'Вкажіть це поле',
+            });
+            return;
+        }
+
+        setFormData({
+            ...formData,
+            ['description']: ''
+        });
+        setIsDescrGenerating(true);
+
+        fetch(`${serverURL}/ai/getText/?c=Придумай опис до оголошення про репетиторство в населеному пункті ${formData.location} з заголовком ${formData.title} з категорії ${formData.category} і з типом навчання ${formData.type} та ціною ${formData.price} українсько. мовою`, { 
+            method: 'GET',
+            headers: {
+                'Authorization': `Token ${localStorage.getItem('mentorFindToken')}`
+            }
+        })
+            .then(response => {
+                if (response.status === 200) {
+                    return response.json();
+                }
+            })
+            .then(data => {
+                setIsDescrGenerating(false);
+                setFormData({
+                    ...formData,
+                    ['description']: data.content
+                });
+                setChangedData({
+                    ...changedData,
+                    ['description']: true
+                });
+            })
+            .catch((error) => {
+                console.error('Error:', error);
+            });
+    }
+
+    const [isImageGenerating, setIsImageGenerating] = useState(false);
+
+    const [generatedImages, setGeneratedImages] = useState([]);
+
+    const generateImage = async () => {
+
+        if (formData.title === '' ?? formData.category === '' ?? formData.location === '' ?? formData.price < 1 ?? formData.type === 'Тип навчання') {
+            setErrors({
+                ...errors, 
+                ['title']: 'Вкажіть це поле',
+                ['location']: 'Вкажіть це поле',
+                ['category']: 'Вкажіть це поле',
+                ['price']: 'Вкажіть це поле',
+                ['type']: 'Вкажіть це поле',
+            });
+            return;
+        }
+
+        setFormData({
+            ...formData,
+            ['image']: null
+        });
+
+        setIsImageGenerating(true);
+
+        fetch(`${serverURL}/ai/getPhoto/?p=Згенеруй фон для оголошення про репетиторство в населеному пункті ${formData.location} з заголовком ${formData.title} з категорії ${formData.category} і з типом навчання ${formData.type} та ціною ${formData.price}`, { 
+            method: 'GET',
+            headers: {
+                'Authorization': `Token ${localStorage.getItem('mentorFindToken')}`
+            }
+        })
+            .then(response => {
+                if (response.status === 200) {
+                    return response.json();
+                }
+            })
+            .then(data => {
+                setIsImageGenerating(false);
+
+                function dataURItoFile(dataURI, filename) {
+                    // Розділення строки на частини
+                    let arr = dataURI.split(','), 
+                        mime = arr[0].match(/:(.*?);/)[1],
+                        bstr = atob(arr[1]), 
+                        n = bstr.length, 
+                        u8arr = new Uint8Array(n);
+                        
+                    // Перетворення бінарної строки у масив байтів
+                    while(n--) {
+                      u8arr[n] = bstr.charCodeAt(n);
+                    }
+                  
+                    // Створення файлу
+                    return new File([u8arr], filename, {type:mime});
+                  }
+                  
+                let files = [];
+                  // Використання функції
+                data.forEach(function(file) {
+                    files.push(dataURItoFile(file, 'generated_image.png'));
+                });
+
+                setGeneratedImages(files.slice(0, 4));
+            })
+            .catch((error) => {
+                console.error('Error:', error);
+            });
+    }
+
+    const selectImage = async (e) => {
+        setFormData({
+            ...formData,
+            ['image']: generatedImages[e.target.id]
+        });
+
+        setChangedData({
+            ...changedData,
+            ['image']: true
+        });
+    }
+
+    const hideChoosingImage = () => {
+        setGeneratedImages([]);
+    }
+
+    const [IdOfAdvert] = useState(window.location.pathname.replace("advertform/edit/", "").replace("/", ""));
+
+    const GetAdvertisementData = () => {
+        if (editingMode) {
+            fetch(`${serverURL}/advert/get/${IdOfAdvert}`, { 
+                method: 'GET',
+                headers: {
+                    'Authorization': `Token ${localStorage.getItem('mentorFindToken')}`
+                }
+            })
+            .then(response => {
+                if (response.status === 200) {
+                    return response.json()
+                }
+            })
+            .then(data => {
+                setFormData({
+                    ...formData,
+                    ['title']: data.title,
+                    ['image']: data.image,
+                    ['description']: data.description,
+                    ['category']: data.category,
+                    ['price']: data.price,
+                    ['location']: data.location,
+                    ['type']: data.type_of_lesson !== "none" ? (data.type_of_lesson ? "Онлайн" : "Офлайн") : "Змішане"
+                });
+            })
+            .catch((error) => {
+                console.error('Error:', error);
+            });
+        }
+        else {
+            setFormData({
+                title: '',
+                category: '',
+                location: '',
+                price: '',
+                description: '',
+                type: 'Тип навчання',
+                image: null
+            });
+        }
+    }
+
+    useEffect(GetAdvertisementData, [IdOfAdvert, editingMode]);
+
     if (isCreated) { 
         return <Navigate replace to="/" />;
     }
+    if (isEdited) { 
+        return <Navigate replace to="/profile" />;
+    }
     return (
         <div className="advert-form-container">
+            {generatedImages.length !== 0 && <div className="choosing-image">
+                <h2>Виберіть зображення</h2>
+                <div className="images">
+                    {generatedImages.map(image => (
+                        <div className={`image-container ${formData.image === image ? 'selected' : ''}`}>
+                            <img id={generatedImages.indexOf(image)} src={CustomCreateURL(image)} onClick={selectImage}/>
+                        </div>
+                    ))}
+                </div>
+                <button className="select-image" onClick={hideChoosingImage}>Підтвердити</button>
+            </div>}
             <div className="advert-form" onClick={CloseSelect}>
-                <h2 className="title advert">Створіть оголошення</h2>
+                <h2 className="title advert">{`${editingMode ? "Редагувати" : "Створіть"} оголошення`}</h2>
                 <div className="input-field advert-long">
                     <i className="fas fa-heading" />
                     <input type="text" placeholder="Заголовок оголошення" className="title-input" name="title" value={formData.title} onChange={handleDataChange}/>
@@ -178,7 +403,7 @@ const AdvertForm = ({NotAuthClick, onCreating}) => {
                 </div>
                 <div className="input-field image">
                     <div className="drop-file" onDragOver={(e) => e.preventDefault()} onDrop={handleDrop}>
-                        {file ? <img src={URL.createObjectURL(file)} alt="Advert"/> : <i className="fa-solid fa-file-arrow-up" />}
+                        {formData.image ? <img src={CustomCreateURL(formData.image)} alt="Advert"/> : (isImageGenerating ? <i className="fa-solid fa-spinner fa-spin-pulse" /> : <i className="fa-solid fa-file-arrow-up" />)}
                         <label className="custom-file-upload">
                             Виберіть <span>фото 1×1</span> для оголошення або перетягніть його сюди 
                             <input
@@ -188,6 +413,7 @@ const AdvertForm = ({NotAuthClick, onCreating}) => {
                                 onChange={handleFileChange}
                             />
                         </label>
+                        <div className="ai-button" onClick={generateImage}><i className="fa-solid fa-robot " /><span>Згенерувати з ШІ</span></div>
                         {errors.image && <span className="error-span">{errors.image}</span>}
                     </div>
                 </div>
@@ -220,11 +446,14 @@ const AdvertForm = ({NotAuthClick, onCreating}) => {
                 </div>
                 <div className="input-field advert-long description">
                     <i className="fas fa-info-circle" />
-                    <textarea id="info" name="description" className="description-input" placeholder="Розкажіть про себе і свій курс" value={formData.description}  onChange={handleDataChange}/>
+                    <textarea id="info" name="description" className="description-input" placeholder={isDescrGenerating ? "" : "Розкажіть про себе і свій курс"} value={formData.description}  onChange={handleDataChange}/>
+                    <div className="ai-button" onClick={generateText}><i className="fa-solid fa-robot " /><span>Згенерувати з ШІ</span></div>
+                    {isDescrGenerating && <i className="fa-solid fa-spinner fa-spin-pulse generating-anim" />}
                     {errors.description && <span className="error-span">{errors.description}</span>}
                 </div>
                 <button className="input-button" id="advert-create-btn" onClick={handleSubmit}>
-                    Створити оголошенння
+                    {`${editingMode ? "Редагувати" : "Створити"} оголошенння`}
+                    {errors.request && <span className="error-span">{errors.request}</span>}
                 </button>
             </div>
         </div>
