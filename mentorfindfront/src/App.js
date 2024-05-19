@@ -12,6 +12,8 @@ import AuthSuccMessage from './components/AuthSuccessMessage';
 import NotFound from './components/NotFoundPage';
 import AdvertPage from './components/AdvertPage';
 import ProfilePage from './components/ProfilePage';
+import WorkingPage from './components/WorkingPage';
+import ConferentionPage from './components/ConferentionPage';
 import LogoBlue from "./img/logo_blue.svg";
 import LogoWhite from "./img/logo_white.svg";
 
@@ -83,10 +85,12 @@ function App() {
         <Route path="/" element={<MainPage />} />
         <Route path="/auth" element={<Auth signUpModeFunc={changeSignUpMode} NotAuthClick={NotAuthClick} changeSuccessAuth={changeSuccessAuth}/>} />
         <Route path="/search" element={<SearchPage />} />
-        <Route path="/advert/*" element={<AdvertPage AuthClick={AuthClick}/>} />
+        <Route path="/advert/*" element={<AdvertPage AuthClick={AuthClick} OnSignUp={handleShowAdvertCreated}/>} />
         <Route path="/advertform" element={<AdvertForm onCreating={handleShowAdvertCreated} NotAuthClick={NotAuthClick} editingMode={false}/>} />
         <Route path="/advertform/edit/*" element={<AdvertForm onCreating={handleShowAdvertCreated} NotAuthClick={NotAuthClick} editingMode={true}/>} />
         <Route path="/profile" element={<ProfilePage onCreating={handleShowAdvertCreated}/>} />
+        <Route path="/workingtable" element={<WorkingPage/>} />
+        <Route path="/conferention/*" element={<ConferentionPage/>} />
         <Route path="*" element={<NotFound />} />
       </Routes>
       {SuccessAuth && <AuthSuccMessage/>}

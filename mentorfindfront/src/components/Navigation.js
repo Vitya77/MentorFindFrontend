@@ -47,6 +47,15 @@ const Navigation = ({signUpMode, navClasses, Logo, AuthClick, NotAuthClick}) => 
               Додати оголошення
             </Link>
           </li>}
+          {localStorage.getItem('mentorFindToken') !== null && <li className="nav-list-item">
+            <Link to="/workingtable" className="nav-link" onClick={NotAuthClick}>
+              <i 
+                className="fa-solid fa-briefcase"
+                style={{ fontSize: "1.5em" }}
+                aria-hidden="true"
+              />
+            </Link>
+          </li>}
           {localStorage.getItem('mentorFindToken') === null ? (
           <li className="nav-list-item">
             <Link to="/auth" className="nav-link" onClick={AuthClick}>

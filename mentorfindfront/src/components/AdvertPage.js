@@ -15,7 +15,7 @@ const validationSchema = Yup.object().shape({ // Validation schema of all inputs
         .required('*  Заповніть це поле'),
 });
 
-function AdvertPage({AuthClick}) {
+function AdvertPage({AuthClick, OnSignUp}) {
 
     const [notFound, setNotFound] = useState(false);
 
@@ -230,6 +230,64 @@ function AdvertPage({AuthClick}) {
         }
       };
 
+      const [myData, setMyData] = useState({});
+    
+    const GetMyData = () => {
+        fetch(`${serverURL}/users/getViaToken/`, { //Sending a request
+            method: 'GET',
+            headers: {
+                'Authorization': `Token ${localStorage.getItem('mentorFindToken')}`
+            }
+        })
+            .then(response => {
+                if (response.status === 404) {
+                    return;
+                }
+                return response.json();
+            })
+            .then(data => {
+                if (data.id && data.email && data.username) {
+                    setMyData(data);
+                }
+            })
+            .catch(error => {
+                console.error('Error fetching data:', error);
+            });
+    }
+
+    useEffect(GetMyData, []);
+
+    const SignUpForAdvert = (e) => {
+        e.preventDefault();
+
+        const textToSend = `Я хочу записатися до вас на оголошення ${advertData.title}! \nБудь ласка зв'яжіться зі мною через емейл: `
+        const dataToSend = JSON.stringify({
+            "receiver": parseInt(authorData.id),
+            "advert": URlparam,
+            "text": textToSend
+        })
+
+        fetch(`${serverURL}/appointment/`, { //Sending a request
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Token ${localStorage.getItem('mentorFindToken')}`
+            },
+            body: dataToSend
+        })
+        .then(response => {
+            if (response.status === 201) {
+                OnSignUp("Ваш запит надіслано, очікуйте відповіді від викладача");
+            }
+            return response.json();
+        })
+        .then(data => {
+        })
+        .catch(error => {
+            console.error('Error fetching data:', error);
+        });
+    }
+
     return notFound ? <NotFound /> : (
         <div className="advert-page">
             <div className="advert-left-side-container">
@@ -240,6 +298,7 @@ function AdvertPage({AuthClick}) {
                     <a href="#advert-information" className="advert-link">Загальна інформація</a>
                     <a href="#advert-about" className="advert-link">Про себе</a>
                     <a href="#advert-reviews" className="advert-link">Відгуки</a>
+                    {localStorage.getItem('mentorFindToken') !== null && myData.id !== authorData.id && <button className="sign-up-for-advert" onClick={SignUpForAdvert}>Записатись</button>}
                 </div>
             </div>
             <div className="advert-right-side">
@@ -247,9 +306,9 @@ function AdvertPage({AuthClick}) {
                     <div className="advert-username">
                         {authorData.username}
                     </div>
-                    <div className="advert-email">
+                    {/* <div className="advert-email">
                         {authorData.email}
-                    </div>
+                    </div> */}
                 </div>
                 <div id="advert-information" className={`advert-information ${localStorage.getItem('mentorFindToken') === null && "not-authenticated"}`}>
                     <div className="advert-information-child advert-title">
