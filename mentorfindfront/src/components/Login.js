@@ -73,7 +73,7 @@ const LoginForm = ({NotAuthClick, changeSuccessAuth}) => {
     }
     return ( // If not, render the login form
         <form onSubmit={handleSubmit} method="post" className="sign-in-form">
-            <h2 className="title">Sign in</h2>
+            <h2 className="title">Увійти</h2>
             <div className="input-field">
                 <i className="fas fa-user" />
                 <input 
@@ -99,7 +99,7 @@ const LoginForm = ({NotAuthClick, changeSuccessAuth}) => {
             </div>
             {unauthorised && (<span className="error-span">Неправильно введене ім'я, емейл користувача або пароль</span>)}
             <input type="submit" defaultValue="Login" className="btn solid" />
-            <p className="social-text">Or Sign in with social platforms</p>
+            <p className="social-text">Або увійдіть за допомогою соціальних мереж</p>
             <div className="social-media">
                 <a href="#" className="social-icon">
                     <i className="fab fa-facebook-f" />

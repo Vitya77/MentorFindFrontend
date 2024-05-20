@@ -6,21 +6,18 @@ function Footer() {
     return (
     <footer className="contacts-section">
       <div className="footer-container">
-        <h4 className="section-header white-header ">Get in touch with us</h4>
+        <h4 className="section-header white-header ">Зв'яжіться з нами</h4>
         <p className="footer-text">
-          Lorem ipsum, dolor sit amet consectetur adipisicing elit. Ut fugiat
-          laboriosam esse. Ratione, ea totam.
+          Наша команда постарається відповісти на ваші запитання як можна швидше :)
         </p>
         <div className="footer-socials">
           <a href="/" className="footer-link"><i className="fa-brands fa-facebook" /></a>
           <a href="/" className="footer-link"><i className="fa-brands fa-twitter" /></a>
-          <a href="/" className="footer-link"><i className="fa-brands fa-telegram" /></a> 
+          <a href="https://t.me/MentorFindHelpBot" target="_blank" rel="noopener noreferrer" className="footer-link"><i className="fa-brands fa-telegram" /></a> 
         </div>
-        <p className="phone">+xx_xxx_xxx_xx</p>
-        <p className="mail">googleapis@gmail.com</p>
       </div>
       <hr color="white" size={1} />
-      <p className="copyright">©DaiS</p>
+      <p className="copyright">©MentorFind</p>
     </footer>
     );
 }

@@ -90,9 +90,11 @@ const Navigation = ({signUpMode, navClasses, Logo, AuthClick, NotAuthClick}) => 
                 <Button variant="secondary" onClick={handleCloseModal} style = {{fontSize: "1em", width: "100px", height: "40px", margin: "10px"}}>
                   Ні
                 </Button>
+                <Link to="/">
                 <Button variant="primary" onClick={LogOut} style = {{fontSize: "1em", width: "100px", height: "40px", margin: "10px"}}>
-                  <Link to="/">Так</Link>
+                  Так
                 </Button>
+                </Link>
               </Modal.Footer>
             </Modal>
           </li></>
