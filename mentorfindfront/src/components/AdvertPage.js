@@ -5,6 +5,7 @@ import NotFound from './NotFoundPage';
 import * as Yup from 'yup';
 import AdvertSelect from './AdvertSelect';
 import { Link } from 'react-router-dom';
+import { LoadScript, GoogleMap, Marker } from '@react-google-maps/api';
 
 const serverURL = config.serverURL;
 
@@ -287,6 +288,33 @@ function AdvertPage({AuthClick, OnSignUp}) {
         });
     }
 
+    const [map, setMap] = useState(null);
+    const [markerPosition, setMarkerPosition] = useState(null);
+    const geocoder = useRef(null);
+
+    useEffect(() => {
+        if (geocoder.current && advertData.location) {
+            geocodeAddress(advertData.location);
+        }
+    }, [advertData.location]);
+
+    const handleMapLoad = (mapInstance) => {
+        setMap(mapInstance);
+        geocoder.current = new window.google.maps.Geocoder();
+    };
+
+    const geocodeAddress = (address) => {
+        geocoder.current.geocode({ address: address }, (results, status) => {
+            if (status === 'OK') {
+                const location = results[0].geometry.location;
+                setMarkerPosition({ lat: location.lat(), lng: location.lng() });
+                map.setCenter(location);
+            } else {
+                console.error('Geocode was not successful for the following reason: ' + status);
+            }
+        });
+    };
+
     return notFound ? <NotFound /> : (
         <div className="advert-page">
             <div className="advert-left-side-container">
@@ -335,6 +363,26 @@ function AdvertPage({AuthClick, OnSignUp}) {
                     <div className="advert-description">
                         {advertData.description}
                         <img src={advertData.image}/>
+                    </div>
+                </div>
+                <div id="advert-about" className="advert-about">
+                    <h2>Розташування</h2>
+                    <div className="google-maps-container">
+                    <LoadScript googleMapsApiKey="AIzaSyA2PFLHKVF2i-4tK62f_onA-E3OtBX6l2s">
+                      <GoogleMap
+                        onLoad={handleMapLoad}
+                        mapContainerStyle={{ height: '400px', width: '800px' }}
+                        center={markerPosition || { lat: 48.8584, lng: 2.2945 }} // Початкове розташування
+                        zoom={9}
+                        options={{
+                            mapTypeControl: false, // Вимкнення контролю типу карти
+                            streetViewControl: false
+                          }}
+                        className="google-map"
+                      >
+                        {markerPosition && <Marker position={markerPosition} />}
+                      </GoogleMap>
+                    </LoadScript>
                     </div>
                 </div>
                 <div id="advert-reviews" className="advert-reviews" ref={reviewsContainerRef}>

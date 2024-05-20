@@ -1284,6 +1284,12 @@ hr {
   flex-direction: column;
 }
 
+.google-maps-container {
+  margin: 0 auto;
+  width: fit-content;
+  box-shadow: 0px 0px 30px -15px black;
+}
+
 .reviews-load {
   background-color: white;
   color: #444;
@@ -1554,7 +1560,25 @@ hr {
 
 .input-field.advert-short {
   max-width: 80%;
-}  
+} 
+
+#location-input > div {
+  display: none;
+}
+
+#location-input > .location-input-container {
+  display: flex;
+  align-items: center;
+}
+
+.location-input {
+  width: 100%;
+  
+}
+
+.input-field.advert-short > i.location:hover {
+  color: red;
+}
 
 .learning-type-input {
   background-color: #f0f0f0;
