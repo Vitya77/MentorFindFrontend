@@ -1,10 +1,26 @@
-import React from 'react';
+import React, {useRef, useEffect} from 'react';
 
 function ConferentionPage() {
+    const videoRef = useRef(null);
+
+    useEffect(() => {
+        const getVideo = async () => {
+            try {
+                const stream = await navigator.mediaDevices.getUserMedia({ video: true });
+                if (videoRef.current) {
+                    videoRef.current.srcObject = stream;
+                }
+            } catch (err) {
+                console.error('Error accessing the webcam: ', err);
+            }
+        };
+
+        getVideo();
+    }, [videoRef]);
     return (
         <div className="conferention-page">
             <div className="user-video">
-                <i className="fa-solid fa-camera"/>
+                <video ref={videoRef} autoPlay />
                 <span>Username</span>
             </div>
             <div className="conferention-panel">

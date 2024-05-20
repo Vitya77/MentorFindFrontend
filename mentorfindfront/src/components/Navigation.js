@@ -22,6 +22,7 @@ const Navigation = ({signUpMode, navClasses, Logo, AuthClick, NotAuthClick}) => 
     const LogOut = () => {
       localStorage.clear();
       handleCloseModal();
+      NotAuthClick();
     } 
 
     return (
@@ -90,7 +91,7 @@ const Navigation = ({signUpMode, navClasses, Logo, AuthClick, NotAuthClick}) => 
                   Ні
                 </Button>
                 <Button variant="primary" onClick={LogOut} style = {{fontSize: "1em", width: "100px", height: "40px", margin: "10px"}}>
-                  Так
+                  <Link to="/">Так</Link>
                 </Button>
               </Modal.Footer>
             </Modal>

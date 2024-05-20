@@ -4,7 +4,7 @@ import config from '../config';
 const serverURL = config.serverURL;
 
 const types = {
-    'sign': <i className="fa-solid fa-plus"/>
+    'sign': <i className="fa-solid fa-user-plus"/>
 }
 
 
