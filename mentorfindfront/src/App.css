@@ -1493,6 +1493,7 @@ hr {
   border-radius: 30px;
   border: #f0f0f0 solid 20px;
   margin-top: 5vh;
+  position: relative;
 }
 
 .title.advert {
@@ -1757,6 +1758,17 @@ input[type="file"] {
   transition: 0.5s;
   padding: 5px 20px;
   grid-column: span 2;
+}
+
+.input-button.delete {
+  position: absolute;
+  bottom: 0;
+  right: 10px;
+  background-color: rgb(200, 0, 0);
+}
+
+.input-button.delete:hover {
+  background-color: red;
 }
 
 .input-button:hover {

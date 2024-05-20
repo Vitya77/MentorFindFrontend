@@ -375,6 +375,28 @@ const AdvertForm = ({NotAuthClick, onCreating, editingMode}) => {
 
     useEffect(GetAdvertisementData, [IdOfAdvert, editingMode]);
 
+    const DeleteAdvertisement = () => {
+        fetch(`${serverURL}/advert/delete/${IdOfAdvert}/`, { 
+            method: 'DELETE',
+            headers: {
+                'Authorization': `Token ${localStorage.getItem('mentorFindToken')}`
+            }
+        })
+        .then(response => {
+            if (response.status === 204) {
+                onCreating("Ви успішно видалили оголошення!");
+                setIsEdited(true);
+                return response.json()
+            }
+        })
+        .then(data => {
+            
+        })
+        .catch((error) => {
+            console.error('Error:', error);
+        });
+    }
+
     if (isCreated) { 
         return <Navigate replace to="/" />;
     }
@@ -455,6 +477,10 @@ const AdvertForm = ({NotAuthClick, onCreating, editingMode}) => {
                     {`${editingMode ? "Редагувати" : "Створити"} оголошенння`}
                     {errors.request && <span className="error-span">{errors.request}</span>}
                 </button>
+                {editingMode && <button className="input-button delete" onClick={DeleteAdvertisement}>
+                    {`Видалити оголошенння`}
+                    {errors.request && <span className="error-span">{errors.request}</span>}
+                </button>}
             </div>
         </div>
     );

@@ -262,7 +262,6 @@ function AdvertPage({AuthClick, OnSignUp}) {
 
         const textToSend = `Я хочу записатися до вас на оголошення ${advertData.title}! \nБудь ласка зв'яжіться зі мною через емейл: `
         const dataToSend = JSON.stringify({
-            "receiver": parseInt(authorData.id),
             "advert": URlparam,
             "text": textToSend
         })
