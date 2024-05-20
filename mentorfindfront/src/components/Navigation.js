@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import LogoBlue from "../img/logo_blue.svg";
+import UkraineFlag from "../img/ukraine-flag.svg";
 import Modal from 'react-bootstrap/Modal';
 import Button from 'react-bootstrap/Button';
 
@@ -24,6 +25,30 @@ const Navigation = ({signUpMode, navClasses, Logo, AuthClick, NotAuthClick}) => 
       handleCloseModal();
       NotAuthClick();
     } 
+
+    const [theme, setTheme] = useState("dark");
+
+    const toggleTheme = () => {
+      setTheme((curr) => (curr === "light" ? "dark" : "light"));
+    };
+
+    const [showSettings, setShowSettings] = useState(false);
+    const [showSettingsAnimation, setShowSettingsAnimation] = useState(false);
+
+    const toggleSettings = () => {
+      if (!showSettings) {
+        setShowSettings(!showSettings);
+         setTimeout(function() {
+          setShowSettingsAnimation(!showSettingsAnimation);
+        }, 100);
+      }
+      else {
+        setShowSettingsAnimation(!showSettingsAnimation);
+        setTimeout(function() {
+          setShowSettings(!showSettings);
+        }, 100);
+      }
+    }
 
     return (
       <nav className={`${navClasses} ${signUpMode}`} id="site-nav">
@@ -57,15 +82,13 @@ const Navigation = ({signUpMode, navClasses, Logo, AuthClick, NotAuthClick}) => 
               />
             </Link>
           </li>}
-          {localStorage.getItem('mentorFindToken') === null ? (
+          {localStorage.getItem('mentorFindToken') === null && 
           <li className="nav-list-item">
             <Link to="/auth" className="nav-link" onClick={AuthClick}>
               Увійти/Зареєструватись
             </Link>
-          </li>
-          ) : (
-            <>
-          <li className="nav-list-item">
+          </li>}
+          {localStorage.getItem('mentorFindToken') !== null && <li className="nav-list-item">
             <Link to="/profile" className="nav-link" onClick={NotAuthClick}>
               <i
                 className="fa fa-user-circle-o"
@@ -73,8 +96,17 @@ const Navigation = ({signUpMode, navClasses, Logo, AuthClick, NotAuthClick}) => 
                 aria-hidden="true"
               />
             </Link>
-          </li>
+          </li>}
           <li className="nav-list-item">
+            <button className="nav-link" onClick={toggleSettings}>
+              <i
+                className="fa-solid fa-gear"
+                style={{ fontSize: "1.5em" }}
+                aria-hidden="true"
+              />
+            </button>
+          </li>
+          {localStorage.getItem('mentorFindToken') !== null && <li className="nav-list-item">
             <button className="nav-link" onClick={handleShowModal}>
               <i
                 className="fa-solid fa-arrow-right-from-bracket"
@@ -97,9 +129,42 @@ const Navigation = ({signUpMode, navClasses, Logo, AuthClick, NotAuthClick}) => 
                 </Link>
               </Modal.Footer>
             </Modal>
-          </li></>
-          )}
+          </li>}
         </ul>
+        {showSettings && <div className={`nav-settings ${showSettingsAnimation && "show"}`}>
+          <h6>Загальні налаштування</h6>
+          <div className="nav-settings-item">
+            <div className={`switch ${theme !== 'light' && "on"}`} onClick={toggleTheme}>
+              <div className="switch-circle"></div>
+            </div>
+            <label>Темна тема</label>
+          </div>
+          <div className="nav-settings-item">
+            <div className="country-icon">
+              <img src={UkraineFlag}/>
+            </div>
+            <label>Вибір мови</label>
+          </div>
+          <h6>Режими доступності</h6>
+          <div className="nav-settings-item">
+            <div className={`switch`}>
+              <div className="switch-circle"></div>
+            </div>
+            <label>Для людей із вадами зору</label>
+          </div>
+          <div className="nav-settings-item">
+            <div className={`switch`}>
+              <div className="switch-circle"></div>
+            </div>
+            <label>Безпечний режим при епілепсії</label>
+          </div>
+          <div className="nav-settings-item">
+            <div className={`switch`}>
+              <div className="switch-circle"></div>
+            </div>
+            <label>Режим сліпоти</label>
+          </div>
+        </div>}
       </nav>
     );
 }
