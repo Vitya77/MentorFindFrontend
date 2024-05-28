@@ -1,0 +1,23 @@
+{
+  "files": {
+    "main.css": "/MentorFindFrontend/static/css/main.6ec12aa7.css",
+    "main.js": "/MentorFindFrontend/static/js/main.216c63cb.js",
+    "static/js/453.60ee46df.chunk.js": "/MentorFindFrontend/static/js/453.60ee46df.chunk.js",
+    "static/media/background-profile.jpg": "/MentorFindFrontend/static/media/background-profile.cfe5777ff63c4f1ea2c7.jpg",
+    "static/media/men-avatar.webp": "/MentorFindFrontend/static/media/men-avatar.71b73efef7e7f6a1c8b3.webp",
+    "static/media/login.svg": "/MentorFindFrontend/static/media/login.a7103636abe9aa982d86b331cdbe0455.svg",
+    "static/media/register.svg": "/MentorFindFrontend/static/media/register.270edb260578be66d92f3ad0f04b50ab.svg",
+    "static/media/women-avatar.webp": "/MentorFindFrontend/static/media/women-avatar.9d9ca1764604d0b7f21c.webp",
+    "static/media/logo_blue.svg": "/MentorFindFrontend/static/media/logo_blue.d37915931b979ca33281542fe78bc264.svg",
+    "static/media/logo_white.svg": "/MentorFindFrontend/static/media/logo_white.c8e0575f3a5ad61c0c8d9f7f16052a5b.svg",
+    "index.html": "/MentorFindFrontend/index.html",
+    "static/media/ukraine-flag.svg": "/MentorFindFrontend/static/media/ukraine-flag.6b24051f454136b07380e790fea5816c.svg",
+    "main.6ec12aa7.css.map": "/MentorFindFrontend/static/css/main.6ec12aa7.css.map",
+    "main.216c63cb.js.map": "/MentorFindFrontend/static/js/main.216c63cb.js.map",
+    "453.60ee46df.chunk.js.map": "/MentorFindFrontend/static/js/453.60ee46df.chunk.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.6ec12aa7.css",
+    "static/js/main.216c63cb.js"
+  ]
+}
