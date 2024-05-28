@@ -82,16 +82,16 @@ function App() {
         </Modal.Header>
       </Modal>
       <Routes>
-        <Route path="/" element={<MainPage />} />
-        <Route path="/auth" element={<Auth signUpModeFunc={changeSignUpMode} NotAuthClick={NotAuthClick} changeSuccessAuth={changeSuccessAuth}/>} />
-        <Route path="/search" element={<SearchPage />} />
-        <Route path="/advert/*" element={<AdvertPage AuthClick={AuthClick} OnSignUp={handleShowAdvertCreated}/>} />
-        <Route path="/advertform" element={<AdvertForm onCreating={handleShowAdvertCreated} NotAuthClick={NotAuthClick} editingMode={false}/>} />
-        <Route path="/advertform/edit/*" element={<AdvertForm onCreating={handleShowAdvertCreated} NotAuthClick={NotAuthClick} editingMode={true}/>} />
-        <Route path="/profile" element={<ProfilePage onCreating={handleShowAdvertCreated}/>} />
-        <Route path="/workingtable" element={<WorkingPage/>} />
-        <Route path="/conferention/*" element={<ConferentionPage/>} />
-        <Route path="*" element={<NotFound />} />
+        <Route path="mentorfind/" element={<MainPage />} />
+        <Route path="mentorfind/auth" element={<Auth signUpModeFunc={changeSignUpMode} NotAuthClick={NotAuthClick} changeSuccessAuth={changeSuccessAuth}/>} />
+        <Route path="mentorfind/search" element={<SearchPage />} />
+        <Route path="mentorfind/advert/*" element={<AdvertPage AuthClick={AuthClick} OnSignUp={handleShowAdvertCreated}/>} />
+        <Route path="mentorfind/advertform" element={<AdvertForm onCreating={handleShowAdvertCreated} NotAuthClick={NotAuthClick} editingMode={false}/>} />
+        <Route path="mentorfind/advertform/edit/*" element={<AdvertForm onCreating={handleShowAdvertCreated} NotAuthClick={NotAuthClick} editingMode={true}/>} />
+        <Route path="mentorfind/profile" element={<ProfilePage onCreating={handleShowAdvertCreated}/>} />
+        <Route path="mentorfind/workingtable" element={<WorkingPage/>} />
+        <Route path="mentorfind/conferention/*" element={<ConferentionPage/>} />
+        <Route path="mentorfind*" element={<NotFound />} />
       </Routes>
       {SuccessAuth && <AuthSuccMessage/>}
       <Footer />
