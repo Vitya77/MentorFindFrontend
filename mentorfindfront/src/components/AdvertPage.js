@@ -431,7 +431,7 @@ function AdvertPage({AuthClick, OnSignUp}) {
                         <div className="send-review-button-container" onClick={sendReview}>
                             <i className="fa-solid fa-paper-plane send-review-button"/>
                         </div>
-                    </div> : <Link to="MentorFindFrontend/auth" className="not-authenticated-review " onClick={AuthClick}>
+                    </div> : <Link to="/auth" className="not-authenticated-review " onClick={AuthClick}>
                             Щоб залишити відгук <span>увійдіть</span> в акаунт <i className="fa-solid fa-arrow-right"/>
                         </Link>}
                 </div>

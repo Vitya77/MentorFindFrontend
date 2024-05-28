@@ -18,7 +18,7 @@ function ConferentionsComponent() {
                 <i className="fa-solid fa-video"/>
                 <span>Приєднатись</span>
             </div>
-            <Link to="MentorFindFrontend/conferention/conferention_id" className="conferention-button">
+            <Link to="/conferention/conferention_id" className="conferention-button">
                 <i className="fa-solid fa-plus"/>
                 <span>Почати конференцію</span>
             </Link>
@@ -27,7 +27,7 @@ function ConferentionsComponent() {
                 <input type="text" placeholder="Id конференції"></input>
                 <div className="buttons">
                     <div className="conf-id-button" onClick={DeactivateInput}>Скасувати</div>
-                    <Link to="MentorFindFrontend/conferention/conferention_id" className="conf-id-button">Приєднатись</Link>
+                    <Link to="/conferention/conferention_id" className="conf-id-button">Приєднатись</Link>
                 </div>
             </div>}
         </div>

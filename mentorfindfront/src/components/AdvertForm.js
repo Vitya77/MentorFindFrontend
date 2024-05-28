@@ -428,10 +428,10 @@ const AdvertForm = ({NotAuthClick, onCreating, editingMode}) => {
     };
 
     if (isCreated) { 
-        return <Navigate replace to="MentorFindFrontend/" />;
+        return <Navigate replace to="/" />;
     }
     if (isEdited) { 
-        return <Navigate replace to="MentorFindFrontend/profile" />;
+        return <Navigate replace to="/profile" />;
     }
     return (
         <div className="advert-form-container">
