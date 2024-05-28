@@ -484,7 +484,7 @@ const AdvertForm = ({NotAuthClick, onCreating, editingMode}) => {
                     {errors.location && <span className="error-span">{errors.location}</span>}
                 </div>
                 <div className="input-field advert-short">
-                    <i className="fas fa-dollar-sign" />
+                    <i>₴</i>
                     <input type="number" placeholder="Ціна" className="price-input" name="price" value={formData.price} onChange={handleDataChange}/>
                     {errors.price && <span className="error-span">{errors.price}</span>}
                 </div>

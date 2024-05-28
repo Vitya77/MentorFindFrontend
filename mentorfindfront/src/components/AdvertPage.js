@@ -355,7 +355,7 @@ function AdvertPage({AuthClick, OnSignUp}) {
                         {advertData.location}
                     </div>
                     <div className="advert-information-child advert-category">
-                        ${advertData.price}
+                        ₴{advertData.price}
                     </div>
                 </div>
                 <div id="advert-about" className="advert-about">
