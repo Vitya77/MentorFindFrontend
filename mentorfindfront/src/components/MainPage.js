@@ -26,7 +26,7 @@ function Main() {
                 name="search"
                 onChange={handleSearchChange}
               />
-              <Link to={"mentorfind/search/?q=" + search} className="search-button">
+              <Link to={"MentorFindFrontend/search/?q=" + search} className="search-button">
                 Пошук
               </Link>
             </div>

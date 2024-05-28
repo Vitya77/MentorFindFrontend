@@ -69,7 +69,7 @@ const LoginForm = ({NotAuthClick, changeSuccessAuth}) => {
 
 
     if (localStorage.getItem('mentorFindToken') !== null && localStorage.getItem('mentorFindToken') !== "") { // If user is authenticated navigate to main page
-        return <Navigate replace to="mentorfind/" />;
+        return <Navigate replace to="MentorFindFrontend/" />;
     }
     return ( // If not, render the login form
         <form onSubmit={handleSubmit} method="post" className="sign-in-form">

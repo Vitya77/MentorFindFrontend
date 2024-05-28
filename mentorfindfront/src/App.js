@@ -82,16 +82,16 @@ function App() {
         </Modal.Header>
       </Modal>
       <Routes>
-        <Route path="mentorfind/" element={<MainPage />} />
-        <Route path="mentorfind/auth" element={<Auth signUpModeFunc={changeSignUpMode} NotAuthClick={NotAuthClick} changeSuccessAuth={changeSuccessAuth}/>} />
-        <Route path="mentorfind/search" element={<SearchPage />} />
-        <Route path="mentorfind/advert/*" element={<AdvertPage AuthClick={AuthClick} OnSignUp={handleShowAdvertCreated}/>} />
-        <Route path="mentorfind/advertform" element={<AdvertForm onCreating={handleShowAdvertCreated} NotAuthClick={NotAuthClick} editingMode={false}/>} />
-        <Route path="mentorfind/advertform/edit/*" element={<AdvertForm onCreating={handleShowAdvertCreated} NotAuthClick={NotAuthClick} editingMode={true}/>} />
-        <Route path="mentorfind/profile" element={<ProfilePage onCreating={handleShowAdvertCreated}/>} />
-        <Route path="mentorfind/workingtable" element={<WorkingPage/>} />
-        <Route path="mentorfind/conferention/*" element={<ConferentionPage/>} />
-        <Route path="mentorfind*" element={<NotFound />} />
+        <Route path="MentorFindFrontend/" element={<MainPage />} />
+        <Route path="MentorFindFrontend/auth" element={<Auth signUpModeFunc={changeSignUpMode} NotAuthClick={NotAuthClick} changeSuccessAuth={changeSuccessAuth}/>} />
+        <Route path="MentorFindFrontend/search" element={<SearchPage />} />
+        <Route path="MentorFindFrontend/advert/*" element={<AdvertPage AuthClick={AuthClick} OnSignUp={handleShowAdvertCreated}/>} />
+        <Route path="MentorFindFrontend/advertform" element={<AdvertForm onCreating={handleShowAdvertCreated} NotAuthClick={NotAuthClick} editingMode={false}/>} />
+        <Route path="MentorFindFrontend/advertform/edit/*" element={<AdvertForm onCreating={handleShowAdvertCreated} NotAuthClick={NotAuthClick} editingMode={true}/>} />
+        <Route path="MentorFindFrontend/profile" element={<ProfilePage onCreating={handleShowAdvertCreated}/>} />
+        <Route path="MentorFindFrontend/workingtable" element={<WorkingPage/>} />
+        <Route path="MentorFindFrontend/conferention/*" element={<ConferentionPage/>} />
+        <Route path="MentorFindFrontend*" element={<NotFound />} />
       </Routes>
       {SuccessAuth && <AuthSuccMessage/>}
       <Footer />
