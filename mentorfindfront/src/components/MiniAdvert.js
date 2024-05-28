@@ -23,7 +23,7 @@ function MiniAdvert({refreshing, setRefreshing, advert_id, title, image, rating,
             {showHeart && <AdvertSelect refreshing={refreshing} setRefreshing={setRefreshing} advert_id={advert_id} is_selected={isSelected}/>}
             {showEdit && <i className="fa-solid fa-pencil" onClick={LinkToEdit}/>}
             <div className="mini-category">${price}</div>
-            <div className="mini-category">{location}</div>
+            <div className="mini-category">{location.split(',')[0]}</div>
             <div className="mini-category">{type}</div>
             <div className="mini-category">{category}</div>
             <div className="mini-description">{description}</div>

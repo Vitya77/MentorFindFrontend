@@ -3,6 +3,7 @@ import config from '../config'
 import * as Yup from 'yup';
 import { Navigate } from 'react-router-dom';
 import { CustomCreateURL } from '../useful';
+import { LoadScript, Autocomplete } from '@react-google-maps/api';
 
 const serverURL = config.serverURL;
 
@@ -375,6 +376,57 @@ const AdvertForm = ({NotAuthClick, onCreating, editingMode}) => {
 
     useEffect(GetAdvertisementData, [IdOfAdvert, editingMode]);
 
+    const DeleteAdvertisement = () => {
+        fetch(`${serverURL}/advert/delete/${IdOfAdvert}/`, { 
+            method: 'DELETE',
+            headers: {
+                'Authorization': `Token ${localStorage.getItem('mentorFindToken')}`
+            }
+        })
+        .then(response => {
+            if (response.status === 204) {
+                onCreating("Ви успішно видалили оголошення!");
+                setIsEdited(true);
+                return response.json()
+            }
+        })
+        .then(data => {
+            
+        })
+        .catch((error) => {
+            console.error('Error:', error);
+        });
+    }
+
+    const [autocomplete, setAutocomplete] = useState(null);
+
+    const handleLoad = (autocompleteInstance) => {
+        setAutocomplete(autocompleteInstance);
+    };
+
+    const handlePlaceChanged = () => {
+        if (autocomplete !== null) {
+            const place = autocomplete.getPlace();
+            if (place.geometry) {
+                const addressComponents = place.address_components;
+                const city = addressComponents.find(component => component.types.includes('locality'))?.long_name || '';
+                const region = addressComponents.find(component => component.types.includes('administrative_area_level_1'))?.long_name || '';
+                const country = addressComponents.find(component => component.types.includes('country'))?.long_name || '';
+                const fullName = `${city}, ${region}, ${country}`;
+                setFormData({
+                    ...formData,
+                    ['location']: fullName
+                });
+                setChangedData({
+                    ...changedData,
+                    ['location']: true
+                });
+            }
+        } else {
+            console.log('Autocomplete is not loaded yet!');
+        }
+    };
+
     if (isCreated) { 
         return <Navigate replace to="/" />;
     }
@@ -422,9 +474,13 @@ const AdvertForm = ({NotAuthClick, onCreating, editingMode}) => {
                     <input type="text" placeholder="Категорія" className="category-input" name="category" value={formData.category} onChange={handleDataChange}/>
                     {errors.category && <span className="error-span">{errors.category}</span>}
                 </div>
-                <div className="input-field advert-short">
-                    <i className="fas fa-map-marker-alt" />
-                    <input type="text" placeholder="Локація" className="location-input" name="location" value={formData.location} onChange={handleDataChange} />
+                <div className="input-field advert-short" id="location-input">
+                    <i className="fas fa-map-marker-alt location" />
+                    <LoadScript googleMapsApiKey="AIzaSyA2PFLHKVF2i-4tK62f_onA-E3OtBX6l2s" libraries={['places']}>
+                        <Autocomplete onLoad={handleLoad} onPlaceChanged={handlePlaceChanged} options={{ types: ['(cities)'] }} className="location-input-container">
+                            <input type="text" placeholder="Локація" className="location-input" name="location" value={formData.location} onChange={handleDataChange} />
+                        </Autocomplete>
+                    </LoadScript>
                     {errors.location && <span className="error-span">{errors.location}</span>}
                 </div>
                 <div className="input-field advert-short">
@@ -455,6 +511,10 @@ const AdvertForm = ({NotAuthClick, onCreating, editingMode}) => {
                     {`${editingMode ? "Редагувати" : "Створити"} оголошенння`}
                     {errors.request && <span className="error-span">{errors.request}</span>}
                 </button>
+                {editingMode && <button className="input-button delete" onClick={DeleteAdvertisement}>
+                    {`Видалити оголошенння`}
+                    {errors.request && <span className="error-span">{errors.request}</span>}
+                </button>}
             </div>
         </div>
     );

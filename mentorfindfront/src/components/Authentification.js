@@ -30,26 +30,24 @@ const Auth = ({signUpModeFunc, NotAuthClick, changeSuccessAuth}) => {
             <div className="panels-container">
                 <div className="panel left-panel">
                     <div className="content">
-                        <h3>New here ?</h3>
+                        <h3>Вперше на сайті?</h3>
                         <p>
-                            Lorem ipsum, dolor sit amet consectetur adipisicing elit. Debitis, ex
-                            ratione. Aliquid!
+                            Пройдіть швидку процедуру реєстрації та почніть користуватись повним функціоналом сайту
                         </p>
-                        <button onClick={SignUpClick} className="btn transparent" id="sign-up-btn">
-                          Sign up
+                        <button onClick={SignUpClick} className="btn transparent" id="sign-up-btn" style={{width: 'fit-content'}}>
+                          Зареєструватись
                         </button>
                     </div>
                     <img src={LoginImg} className="image" alt="" />
                 </div>
                 <div className="panel right-panel">
                     <div className="content">
-                        <h3>One of us ?</h3>
+                        <h3>Вже реєструвались?</h3>
                         <p>
-                          Lorem ipsum dolor sit amet consectetur adipisicing elit. Nostrum
-                          laboriosam ad deleniti.
+                          Увійдіть в акаунт, щоб отримати доступ до своїх даних
                         </p>
                         <button onClick={SignInClick} className="btn transparent" id="sign-in-btn">
-                          Sign in
+                          Увійти
                         </button>
                     </div>
                     <img src={RegisterImg} className="image" alt="" />

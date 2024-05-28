@@ -5,6 +5,7 @@ import NotFound from './NotFoundPage';
 import * as Yup from 'yup';
 import AdvertSelect from './AdvertSelect';
 import { Link } from 'react-router-dom';
+import { LoadScript, GoogleMap, Marker } from '@react-google-maps/api';
 
 const serverURL = config.serverURL;
 
@@ -15,7 +16,7 @@ const validationSchema = Yup.object().shape({ // Validation schema of all inputs
         .required('*  Заповніть це поле'),
 });
 
-function AdvertPage({AuthClick}) {
+function AdvertPage({AuthClick, OnSignUp}) {
 
     const [notFound, setNotFound] = useState(false);
 
@@ -230,6 +231,90 @@ function AdvertPage({AuthClick}) {
         }
       };
 
+      const [myData, setMyData] = useState({});
+    
+    const GetMyData = () => {
+        fetch(`${serverURL}/users/getViaToken/`, { //Sending a request
+            method: 'GET',
+            headers: {
+                'Authorization': `Token ${localStorage.getItem('mentorFindToken')}`
+            }
+        })
+            .then(response => {
+                if (response.status === 404) {
+                    return;
+                }
+                return response.json();
+            })
+            .then(data => {
+                if (data.id && data.email && data.username) {
+                    setMyData(data);
+                }
+            })
+            .catch(error => {
+                console.error('Error fetching data:', error);
+            });
+    }
+
+    useEffect(GetMyData, []);
+
+    const SignUpForAdvert = (e) => {
+        e.preventDefault();
+
+        const textToSend = `Я хочу записатися до вас на оголошення ${advertData.title}! \nБудь ласка зв'яжіться зі мною через емейл: `
+        const dataToSend = JSON.stringify({
+            "advert": URlparam,
+            "text": textToSend
+        })
+
+        fetch(`${serverURL}/appointment/`, { //Sending a request
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Token ${localStorage.getItem('mentorFindToken')}`
+            },
+            body: dataToSend
+        })
+        .then(response => {
+            if (response.status === 201) {
+                OnSignUp("Ваш запит надіслано, очікуйте відповіді від викладача");
+            }
+            return response.json();
+        })
+        .then(data => {
+        })
+        .catch(error => {
+            console.error('Error fetching data:', error);
+        });
+    }
+
+    const [map, setMap] = useState(null);
+    const [markerPosition, setMarkerPosition] = useState(null);
+    const geocoder = useRef(null);
+
+    useEffect(() => {
+        if (geocoder.current && advertData.location) {
+            geocodeAddress(advertData.location);
+        }
+    }, [advertData.location]);
+
+    const handleMapLoad = (mapInstance) => {
+        setMap(mapInstance);
+        geocoder.current = new window.google.maps.Geocoder();
+    };
+
+    const geocodeAddress = (address) => {
+        geocoder.current.geocode({ address: address }, (results, status) => {
+            if (status === 'OK') {
+                const location = results[0].geometry.location;
+                setMarkerPosition({ lat: location.lat(), lng: location.lng() });
+                map.setCenter(location);
+            } else {
+                console.error('Geocode was not successful for the following reason: ' + status);
+            }
+        });
+    };
+
     return notFound ? <NotFound /> : (
         <div className="advert-page">
             <div className="advert-left-side-container">
@@ -240,6 +325,7 @@ function AdvertPage({AuthClick}) {
                     <a href="#advert-information" className="advert-link">Загальна інформація</a>
                     <a href="#advert-about" className="advert-link">Про себе</a>
                     <a href="#advert-reviews" className="advert-link">Відгуки</a>
+                    {localStorage.getItem('mentorFindToken') !== null && myData.id !== authorData.id && <button className="sign-up-for-advert" onClick={SignUpForAdvert}>Записатись</button>}
                 </div>
             </div>
             <div className="advert-right-side">
@@ -247,9 +333,9 @@ function AdvertPage({AuthClick}) {
                     <div className="advert-username">
                         {authorData.username}
                     </div>
-                    <div className="advert-email">
+                    {/* <div className="advert-email">
                         {authorData.email}
-                    </div>
+                    </div> */}
                 </div>
                 <div id="advert-information" className={`advert-information ${localStorage.getItem('mentorFindToken') === null && "not-authenticated"}`}>
                     <div className="advert-information-child advert-title">
@@ -277,6 +363,26 @@ function AdvertPage({AuthClick}) {
                     <div className="advert-description">
                         {advertData.description}
                         <img src={advertData.image}/>
+                    </div>
+                </div>
+                <div id="advert-about" className="advert-about">
+                    <h2>Розташування</h2>
+                    <div className="google-maps-container">
+                    <LoadScript googleMapsApiKey="AIzaSyA2PFLHKVF2i-4tK62f_onA-E3OtBX6l2s">
+                      <GoogleMap
+                        onLoad={handleMapLoad}
+                        mapContainerStyle={{ height: '400px', width: '800px' }}
+                        center={markerPosition || { lat: 48.8584, lng: 2.2945 }} // Початкове розташування
+                        zoom={9}
+                        options={{
+                            mapTypeControl: false, // Вимкнення контролю типу карти
+                            streetViewControl: false
+                          }}
+                        className="google-map"
+                      >
+                        {markerPosition && <Marker position={markerPosition} />}
+                      </GoogleMap>
+                    </LoadScript>
                     </div>
                 </div>
                 <div id="advert-reviews" className="advert-reviews" ref={reviewsContainerRef}>

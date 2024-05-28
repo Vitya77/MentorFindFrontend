@@ -223,7 +223,7 @@ const RegistrationForm = ({NotAuthClick, changeSuccessAuth}) => {
             {errors.confirmPassword && <span className="error-span">{errors.confirmPassword}</span>}
             {!(formData.confirmPassword === formData.password || formData.confirmPassword === '') && <span className="error-span">Паролі не співпадають</span>}
             <input type="submit" className="btn" defaultValue="Sign up" />
-            <p className="social-text">Or Sign up with social platforms</p>
+            <p className="social-text">Або зареєструйтесь за допомогою соціальних мереж</p>
             <div className="social-media">
                 <a href="#" className="social-icon">
                     <i className="fab fa-facebook-f" />
