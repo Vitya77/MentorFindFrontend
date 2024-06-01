@@ -11,8 +11,8 @@ function MiniAdvert({refreshing, setRefreshing, advert_id, title, image, rating,
         setIsEdit(true);
     }
 
-    return isEdit ? (<Navigate replace to={`/MentorFindFront/advertform/edit/${advert_id}`} />) : (
-        <Link to={`/MentorFindFront/advert/${advert_id}`} className={`mini-advert ${showHeart ? "show-heart": ""} ${showEdit ? "show-edit" : ""}`}>
+    return isEdit ? (<Navigate replace to={`/MentorFindFrontend/advertform/edit/${advert_id}`} />) : (
+        <Link to={`/MentorFindFrontend/advert/${advert_id}`} className={`mini-advert ${showHeart ? "show-heart": ""} ${showEdit ? "show-edit" : ""}`}>
             <div className="mini-teacher-photo">
                 <img src={image} alt="Avatar"/>
             </div>
