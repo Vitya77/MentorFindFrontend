@@ -150,7 +150,7 @@ const RegistrationForm = ({NotAuthClick, changeSuccessAuth}) => {
     };
 
     if (localStorage.getItem('mentorFindToken') !== null && localStorage.getItem('mentorFindToken') !== "") { // If user is authenticated navigate to main page
-        return <Navigate replace to="/" />;
+        return <Navigate replace to="/MentorFindFront/" />;
     }
     return ( // If not, render the registration form
         <form onSubmit={handleSubmit} method="post" className="sign-up-form">

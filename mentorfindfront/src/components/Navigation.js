@@ -52,14 +52,14 @@ const Navigation = ({signUpMode, navClasses, Logo, AuthClick, NotAuthClick}) => 
 
     return (
       <nav className={`${navClasses} ${signUpMode}`} id="site-nav">
-        <Link to="/" className="logo-link" onClick={NotAuthClick}>
+        <Link to="/MentorFindFront/" className="logo-link" onClick={NotAuthClick}>
           <img src={signUpMode !== "" ? LogoBlue : Logo} alt="Logo" />
           <h2 className="logo">MentorFind</h2>
         </Link>
         <ul className="nav-list">
           <li></li>
           <li className="nav-list-item">
-            <Link to="/" className="nav-link" onClick={NotAuthClick}>
+            <Link to="/MentorFindFront/" className="nav-link" onClick={NotAuthClick}>
               <i
                 className="fa fa-home fa-fw"
                 style={{ fontSize: "1.3em" }}
@@ -69,12 +69,12 @@ const Navigation = ({signUpMode, navClasses, Logo, AuthClick, NotAuthClick}) => 
             </Link>
           </li>
           {localStorage.getItem('mentorFindToken') !== null && <li className="nav-list-item">
-            <Link to="/advertform" className="nav-link" onClick={AuthClick}>
+            <Link to="/MentorFindFront/advertform" className="nav-link" onClick={AuthClick}>
               Додати оголошення
             </Link>
           </li>}
           {localStorage.getItem('mentorFindToken') !== null && <li className="nav-list-item">
-            <Link to="/workingtable" className="nav-link" onClick={NotAuthClick}>
+            <Link to="/MentorFindFront/workingtable" className="nav-link" onClick={NotAuthClick}>
               <i 
                 className="fa-solid fa-briefcase"
                 style={{ fontSize: "1.5em" }}
@@ -84,12 +84,12 @@ const Navigation = ({signUpMode, navClasses, Logo, AuthClick, NotAuthClick}) => 
           </li>}
           {localStorage.getItem('mentorFindToken') === null && 
           <li className="nav-list-item">
-            <Link to="/auth" className="nav-link" onClick={AuthClick}>
+            <Link to="/MentorFindFront/auth" className="nav-link" onClick={AuthClick}>
               Увійти/Зареєструватись
             </Link>
           </li>}
           {localStorage.getItem('mentorFindToken') !== null && <li className="nav-list-item">
-            <Link to="/profile" className="nav-link" onClick={NotAuthClick}>
+            <Link to="/MentorFindFront/profile" className="nav-link" onClick={NotAuthClick}>
               <i
                 className="fa fa-user-circle-o"
                 style={{ fontSize: "1.5em" }}
@@ -122,7 +122,7 @@ const Navigation = ({signUpMode, navClasses, Logo, AuthClick, NotAuthClick}) => 
                 <Button variant="secondary" onClick={handleCloseModal} style = {{fontSize: "1em", width: "100px", height: "40px", margin: "10px"}}>
                   Ні
                 </Button>
-                <Link to="/">
+                <Link to="/MentorFindFront/">
                 <Button variant="primary" onClick={LogOut} style = {{fontSize: "1em", width: "100px", height: "40px", margin: "10px"}}>
                   Так
                 </Button>

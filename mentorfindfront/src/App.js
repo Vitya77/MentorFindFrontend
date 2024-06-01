@@ -82,15 +82,15 @@ function App() {
         </Modal.Header>
       </Modal>
       <Routes>
-        <Route path="/" element={<MainPage />} />
-        <Route path="/auth" element={<Auth signUpModeFunc={changeSignUpMode} NotAuthClick={NotAuthClick} changeSuccessAuth={changeSuccessAuth}/>} />
-        <Route path="/search" element={<SearchPage />} />
-        <Route path="/advert/*" element={<AdvertPage AuthClick={AuthClick} OnSignUp={handleShowAdvertCreated}/>} />
-        <Route path="/advertform" element={<AdvertForm onCreating={handleShowAdvertCreated} NotAuthClick={NotAuthClick} editingMode={false}/>} />
-        <Route path="/advertform/edit/*" element={<AdvertForm onCreating={handleShowAdvertCreated} NotAuthClick={NotAuthClick} editingMode={true}/>} />
-        <Route path="/profile" element={<ProfilePage onCreating={handleShowAdvertCreated}/>} />
-        <Route path="/workingtable" element={<WorkingPage/>} />
-        <Route path="/conferention/*" element={<ConferentionPage/>} />
+        <Route path="/MentorFindFront" element={<MainPage />} />
+        <Route path="/MentorFindFront/auth" element={<Auth signUpModeFunc={changeSignUpMode} NotAuthClick={NotAuthClick} changeSuccessAuth={changeSuccessAuth}/>} />
+        <Route path="/MentorFindFront/search" element={<SearchPage />} />
+        <Route path="/MentorFindFront/advert/*" element={<AdvertPage AuthClick={AuthClick} OnSignUp={handleShowAdvertCreated}/>} />
+        <Route path="/MentorFindFront/advertform" element={<AdvertForm onCreating={handleShowAdvertCreated} NotAuthClick={NotAuthClick} editingMode={false}/>} />
+        <Route path="/MentorFindFront/advertform/edit/*" element={<AdvertForm onCreating={handleShowAdvertCreated} NotAuthClick={NotAuthClick} editingMode={true}/>} />
+        <Route path="/MentorFindFront/profile" element={<ProfilePage onCreating={handleShowAdvertCreated}/>} />
+        <Route path="/MentorFindFront/workingtable" element={<WorkingPage/>} />
+        <Route path="/MentorFindFront/conferention/*" element={<ConferentionPage/>} />
         <Route path="*" element={<NotFound />} />
       </Routes>
       {SuccessAuth && <AuthSuccMessage/>}

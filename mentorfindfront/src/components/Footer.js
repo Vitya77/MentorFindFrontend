@@ -11,8 +11,8 @@ function Footer() {
           Наша команда постарається відповісти на ваші запитання як можна швидше :)
         </p>
         <div className="footer-socials">
-          <a href="/" className="footer-link"><i className="fa-brands fa-facebook" /></a>
-          <a href="/" className="footer-link"><i className="fa-brands fa-twitter" /></a>
+          <a href="/MentorFindFront/" className="footer-link"><i className="fa-brands fa-facebook" /></a>
+          <a href="/MentorFindFront/" className="footer-link"><i className="fa-brands fa-twitter" /></a>
           <a href="https://t.me/MentorFindHelpBot" target="_blank" rel="noopener noreferrer" className="footer-link"><i className="fa-brands fa-telegram" /></a> 
         </div>
       </div>
